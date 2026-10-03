@@ -39,18 +39,18 @@ Second moment: the owner taps **Freeze** and the agent's next call fails within 
 
 ## Essential flows
 
-| Flow | What happens |
-|---|---|
-| First visit | Landing page shows a live-looking receipt feed with one rejection; headline explains the product in one sentence; primary CTA "Create a stipend". |
-| Onboarding | Passkey sign-in creates a smart account. No seed phrases, no network switching, gas sponsored. |
+| Flow           | What happens                                                                                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| First visit    | Landing page shows a live-looking receipt feed with one rejection; headline explains the product in one sentence; primary CTA "Create a stipend".                        |
+| Onboarding     | Passkey sign-in creates a smart account. No seed phrases, no network switching, gas sponsored.                                                                           |
 | Primary action | New stipend: name and purpose, budget and period, per-call cap, rate limit, duplicate guard, merchant policy, expiry. Plain-English summary updates live. One signature. |
-| Confirmation | Staged status: Preparing → Waiting for passkey → Submitted → Confirming → Created. |
-| Connect | Generate a session credential scoped to this stipend. Show as env var / MCP block / SDK snippet. Shown once; regenerate revokes the previous. |
-| Result | Stipend page: remaining budget ring, next refill, policy summary, receipts feed (live), Freeze button always visible. |
-| History | Receipts with merchant identity, resource, amount, status (paid / rejected with reason), time, tx link under "details". |
-| Error recovery | Passkey cancelled, insufficient balance, wrong network (handled by SDK), reverted payment with human reason, RPC down (retry with cached state), expired credential. |
-| Returning user | `/app` lists stipends with status and last activity; anomaly chips surface what changed since last visit. |
-| Merchant | `/merchants` directory and `/merchant` console: register, add tags, see payer stats. |
+| Confirmation   | Staged status: Preparing → Waiting for passkey → Submitted → Confirming → Created.                                                                                       |
+| Connect        | Generate a session credential scoped to this stipend. Show as env var / MCP block / SDK snippet. Shown once; regenerate revokes the previous.                            |
+| Result         | Stipend page: remaining budget ring, next refill, policy summary, receipts feed (live), Freeze button always visible.                                                    |
+| History        | Receipts with merchant identity, resource, amount, status (paid / rejected with reason), time, tx link under "details".                                                  |
+| Error recovery | Passkey cancelled, insufficient balance, wrong network (handled by SDK), reverted payment with human reason, RPC down (retry with cached state), expired credential.     |
+| Returning user | `/app` lists stipends with status and last activity; anomaly chips surface what changed since last visit.                                                                |
+| Merchant       | `/merchants` directory and `/merchant` console: register, add tags, see payer stats.                                                                                     |
 
 ## Vocabulary
 

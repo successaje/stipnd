@@ -10,15 +10,15 @@ Built on Arbitrum with ZeroDev smart accounts, x402-style HTTP payments, and ERC
 
 ## Repository
 
-| Path | Purpose |
-|---|---|
-| `packages/contracts` | `StipendHub` and `MerchantRegistry` (Foundry) |
-| `packages/protocol` | Shared types, ABIs, chain config |
-| `packages/sdk` | Agent-side client: handles `402`, pays within policy |
-| `apps/web` | Owner app, merchant console, landing |
-| `apps/merchant` | Reference paid API with settlement verification |
-| `apps/agent` | Reference agent used for demos and e2e tests |
-| `docs` | Product model, architecture, research |
+| Path                 | Purpose                                              |
+| -------------------- | ---------------------------------------------------- |
+| `packages/contracts` | `StipendHub` and `MerchantRegistry` (Foundry)        |
+| `packages/protocol`  | Shared types, ABIs, chain config                     |
+| `packages/sdk`       | Agent-side client: handles `402`, pays within policy |
+| `apps/web`           | Owner app, merchant console, landing                 |
+| `apps/merchant`      | Reference paid API with settlement verification      |
+| `apps/agent`         | Reference agent used for demos and e2e tests         |
+| `docs`               | Product model, architecture, research                |
 
 ## Local development
 

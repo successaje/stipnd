@@ -9,13 +9,15 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "pnpm -r --filter './packages/**' build && pnpm --filter ./apps/web build",
-    "dev": "pnpm --filter ./apps/web dev",
-    "dev:merchant": "pnpm --filter ./apps/merchant dev",
-    "lint": "pnpm -r lint",
-    "typecheck": "pnpm -r typecheck",
-    "test": "pnpm -r test",
-    "test:contracts": "pnpm --filter ./packages/contracts test",
+    "build": "pnpm --filter @stipnd/web build",
+    "dev": "pnpm --filter @stipnd/web dev",
+    "dev:merchant": "pnpm --filter @stipnd/merchant dev",
+    "agent": "pnpm --filter @stipnd/agent start",
+    "lint": "pnpm -r --filter=!@stipnd/contracts lint",
+    "typecheck": "pnpm -r --filter=!@stipnd/contracts typecheck",
+    "test": "pnpm -r --filter=!@stipnd/contracts test",
+    "test:contracts": "pnpm --filter @stipnd/contracts test",
+    "abi:export": "pnpm --filter @stipnd/contracts build && pnpm --filter @stipnd/contracts abi:export",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

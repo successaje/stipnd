@@ -8,30 +8,30 @@ Foundry package for the Stipnd onchain layer.
 
 Holds stipends and enforces their policy on every `pay` call.
 
-| Function | Who | What |
-|---|---|---|
-| `create(token, name, purpose, policy, allowlist, initialFunding)` | anyone | Creates a stipend owned by `msg.sender` and optionally funds it |
-| `fund(id, amount)` | anyone | Tops up a stipend (pull via `transferFrom`) |
-| `pay(id, merchant, amount, resourceHash, memo)` | owner account | Pays a merchant if policy allows. Policy failures **emit `PaymentRejected` and return `false`** instead of reverting, so every attempt is a receipt |
-| `setFrozen(id, bool)` | owner | Kill switch |
-| `updatePolicy(id, policy)` | owner | Replaces policy and starts a fresh period |
-| `setAllowlist(id, merchants, allowed)` | owner | Edits the per-stipend allowlist |
-| `withdraw(id, amount, to)` | owner | Returns funds |
-| `preview(id, merchant, amount, resourceHash)` | view | Tells a client what `pay` would do right now, including simulated period roll-over |
+| Function                                                          | Who           | What                                                                                                                                                |
+| ----------------------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `create(token, name, purpose, policy, allowlist, initialFunding)` | anyone        | Creates a stipend owned by `msg.sender` and optionally funds it                                                                                     |
+| `fund(id, amount)`                                                | anyone        | Tops up a stipend (pull via `transferFrom`)                                                                                                         |
+| `pay(id, merchant, amount, resourceHash, memo)`                   | owner account | Pays a merchant if policy allows. Policy failures **emit `PaymentRejected` and return `false`** instead of reverting, so every attempt is a receipt |
+| `setFrozen(id, bool)`                                             | owner         | Kill switch                                                                                                                                         |
+| `updatePolicy(id, policy)`                                        | owner         | Replaces policy and starts a fresh period                                                                                                           |
+| `setAllowlist(id, merchants, allowed)`                            | owner         | Edits the per-stipend allowlist                                                                                                                     |
+| `withdraw(id, amount, to)`                                        | owner         | Returns funds                                                                                                                                       |
+| `preview(id, merchant, amount, resourceHash)`                     | view          | Tells a client what `pay` would do right now, including simulated period roll-over                                                                  |
 
 The owner is expected to be a smart account (ZeroDev Kernel). The agent holds a session key that the account restricts to `pay` for one stipend id with a per-call parameter cap and a rate limit. The hub does not distinguish keys; it enforces the stipend's rules for every call. Two independent layers bound exposure.
 
 #### Policy
 
-| Field | Meaning |
-|---|---|
-| `periodBudget`, `periodLength` | Max spend per period. `periodLength = 0` means a single period that never refills |
-| `perCallCap` | Max per payment |
-| `maxCallsPerWindow`, `rateWindow` | Fixed-window rate limit. `0` disables |
-| `maxSameResource`, `duplicateWindow` | Max payments for the same `resourceHash` per window. Stops loops. `0` disables |
-| `merchantMode` | `Any`, `Allowlist`, `Verified`, `VerifiedOrAllowlist` |
-| `minMerchantSettlements` | In verified modes, the merchant must have at least this many recorded settlements |
-| `expiresAt` | Hard expiry. `0` means never |
+| Field                                | Meaning                                                                           |
+| ------------------------------------ | --------------------------------------------------------------------------------- |
+| `periodBudget`, `periodLength`       | Max spend per period. `periodLength = 0` means a single period that never refills |
+| `perCallCap`                         | Max per payment                                                                   |
+| `maxCallsPerWindow`, `rateWindow`    | Fixed-window rate limit. `0` disables                                             |
+| `maxSameResource`, `duplicateWindow` | Max payments for the same `resourceHash` per window. Stops loops. `0` disables    |
+| `merchantMode`                       | `Any`, `Allowlist`, `Verified`, `VerifiedOrAllowlist`                             |
+| `minMerchantSettlements`             | In verified modes, the merchant must have at least this many recorded settlements |
+| `expiresAt`                          | Hard expiry. `0` means never                                                      |
 
 #### Rejection reasons
 
