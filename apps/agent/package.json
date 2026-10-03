@@ -1,0 +1,26 @@
+{
+  "name": "@stipnd/agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reference agent: buys from a Stipnd merchant using a stipend credential. Normal, over-cap, and loop modes for demos and e2e checks.",
+  "type": "module",
+  "bin": {
+    "stipnd-agent": "./src/cli.ts"
+  },
+  "scripts": {
+    "start": "tsx src/cli.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "prettier --check src"
+  },
+  "dependencies": {
+    "@stipnd/protocol": "workspace:*",
+    "@stipnd/sdk": "workspace:*",
+    "dotenv": "^17.2.3",
+    "viem": "^2.57.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}

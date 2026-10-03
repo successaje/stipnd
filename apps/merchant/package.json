@@ -1,0 +1,28 @@
+{
+  "name": "@stipnd/merchant",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reference merchant: a paid HTTP API that issues Stipnd 402 challenges and verifies settlement onchain.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "lint": "prettier --check src test"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.3",
+    "@stipnd/protocol": "workspace:*",
+    "@stipnd/sdk": "workspace:*",
+    "dotenv": "^18.0.5",
+    "hono": "^4.13.12",
+    "viem": "^2.57.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^5.0.3"
+  }
+}
