@@ -1,5 +1,5 @@
 import { isAddress, type Address } from "viem";
-import { CHAINS, getChainInfo, zeroDevRpc } from "@stipnd/protocol";
+import { CHAINS, getChainInfo, getDeployment, zeroDevRpc } from "@stipnd/protocol";
 
 /**
  * Public configuration, read once from NEXT_PUBLIC_* at build time.
@@ -25,6 +25,7 @@ const env = {
 
 const chainId = Number(env.chainId ?? 421614);
 const chainInfo = CHAINS[chainId] ? getChainInfo(chainId) : undefined;
+const known = getDeployment(chainId);
 
 function addr(v: string | undefined): Address | undefined {
   return v && isAddress(v) ? v : undefined;
@@ -32,11 +33,11 @@ function addr(v: string | undefined): Address | undefined {
 
 const missing: string[] = [];
 if (!chainInfo) missing.push("NEXT_PUBLIC_CHAIN_ID (unsupported chain)");
-const hub = addr(env.hub);
+const hub = addr(env.hub) ?? known?.stipendHub;
 if (!hub) missing.push("NEXT_PUBLIC_STIPEND_HUB_ADDRESS");
-const registry = addr(env.registry);
+const registry = addr(env.registry) ?? known?.merchantRegistry;
 if (!registry) missing.push("NEXT_PUBLIC_MERCHANT_REGISTRY_ADDRESS");
-const tokenAddress = addr(env.token) ?? chainInfo?.defaultToken?.address;
+const tokenAddress = addr(env.token) ?? known?.token.address ?? chainInfo?.defaultToken?.address;
 if (!tokenAddress) missing.push("NEXT_PUBLIC_TOKEN_ADDRESS");
 const projectId = env.projectId;
 const bundlerUrl = env.bundler || (projectId ? zeroDevRpc(projectId, chainId) : undefined);
@@ -61,7 +62,7 @@ export const appConfig = {
   paymasterUrl: env.paymaster || (bundlerUrl as string),
   passkeyServerUrl:
     env.passkeyServer || (projectId ? `https://passkeys.zerodev.app/api/v3/${projectId}` : ""),
-  deployBlock: env.deployBlock ? BigInt(env.deployBlock) : 0n,
+  deployBlock: env.deployBlock ? BigInt(env.deployBlock) : (known?.deployBlock ?? 0n),
   devSignerEnabled: env.devSigner === "true",
   merchantUrl: env.merchantUrl || "",
 } as const;
