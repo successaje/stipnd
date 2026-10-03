@@ -14,7 +14,7 @@ Everyone is building the agent's **wallet**. Nobody is building the **allowance*
 
 The thesis in one line: **the agent decides when to pay; the chain decides whether it may.** Policy lives in a smart account, not in a prompt, a dashboard, or a vendor's database.
 
-Why this is a *new financial primitive* and not a wallet feature: an allowance is a three-party object (owner, delegate, merchant universe) with a budget curve over time, merchant eligibility rules tied to onchain identity, and a verifiable spend history that other parties (lenders, merchants, insurers) can read. That is closer to a corporate card program than a wallet, and it is composable in ways card programs are not.
+Why this is a _new financial primitive_ and not a wallet feature: an allowance is a three-party object (owner, delegate, merchant universe) with a budget curve over time, merchant eligibility rules tied to onchain identity, and a verifiable spend history that other parties (lenders, merchants, insurers) can read. That is closer to a corporate card program than a wallet, and it is composable in ways card programs are not.
 
 ## 2. Who it is for
 
@@ -48,11 +48,13 @@ Three weeks later, a data vendor she has never used accepts her agent's payment 
 ## 4. Exact UX flow
 
 **Onboarding (60 seconds)**
+
 1. Open app → "Continue with passkey" (ZeroDev passkey signer; no seed phrase).
 2. Owner smart account is deployed lazily on first allowance creation (sponsored gas).
 3. Fund: paste from an existing wallet, or pay USDC/USDG from any chain via a bridge widget. For the hackathon, testnet faucet.
 
 **Create allowance (90 seconds)**
+
 1. Name + purpose (free text; stored as metadata, shown on receipts).
 2. Budget: amount, period (daily/weekly/monthly/one-shot), refill behavior, hard expiry.
 3. Per-call cap. Rate limit (calls per window).
@@ -61,21 +63,25 @@ Three weeks later, a data vendor she has never used accepts her agent's payment 
 6. Review → sign with passkey → allowance deployed.
 
 **Connect an agent (30 seconds)**
+
 1. Choose integration: environment variable (`AGENT_ALLOWANCE_URL` + session credential), MCP server block, LangChain/OpenAI Agents SDK tool, or raw HTTP proxy.
 2. Copy. Done. The agent's HTTP client now auto-handles 402 challenges within policy.
 
 **Watch (ongoing)**
+
 - Live receipts feed: time, merchant (ERC-8004 name if registered), amount, what was purchased (from the challenge metadata), status, tx hash.
 - Budget ring with projected exhaustion date.
 - Anomaly chips: "spend rate 4x normal," "new merchant," "repeat purchase of same resource 30 times."
 
 **Intervene (5 seconds)**
+
 - Freeze allowance (revokes session key onchain in one sponsored tx).
 - Freeze all.
 - Raise or lower limits (new permission, old one revoked).
 - Withdraw remainder.
 
 **Merchant side**
+
 - "Accept Agent Allowance payments": one line in their x402/MPP server config pointing at our facilitator, or nothing at all if they already use the Coinbase facilitator (see architecture path A).
 - Merchant console: register ERC-8004 identity, set tags, see payer reputation, export receipts.
 
@@ -103,7 +109,7 @@ Owner (passkey) ──owns──> Owner Kernel account (ZeroDev)
                                 └── Session key (agent) with Kernel permission:
                                         CallPolicy: only AllowanceVault.pay(...)
                                         RateLimitPolicy, TimestampPolicy, GasPolicy
-                                        
+
 Agent HTTP client ── 402 challenge ──> Merchant (x402 or MPP server)
         │                                   ▲
         └── Allowance Payer SDK ──> Facilitator / Settler ── settles via vault.pay ──┘
@@ -116,12 +122,14 @@ ERC-8004 Identity + Reputation registries (Arbitrum mainnet, Robinhood Chain)
 ### 6.2 Policy enforcement: two layers, on purpose
 
 **Layer 1: Kernel permissions (ZeroDev).** The agent never holds the owner key. It holds a session key whose permission is `1 signer + policies + action`:
+
 - Call policy: target = this allowance's vault, selector = `pay(address merchant, uint256 amount, bytes32 resourceHash, bytes merchantProof)`, parameter condition `amount <= perCallCap`.
 - Rate limit policy: N UserOps per window.
 - Timestamp policy: expiry.
 - Gas policy: cap sponsored gas so a looping agent cannot drain the paymaster.
 
-**Layer 2: AllowanceVault contract.** Kernel's built-in policies do per-call and per-window *counts*, not cumulative *token amounts* across calls. The vault adds what Kernel lacks:
+**Layer 2: AllowanceVault contract.** Kernel's built-in policies do per-call and per-window _counts_, not cumulative _token amounts_ across calls. The vault adds what Kernel lacks:
+
 - Cumulative budget per period with rollover rules.
 - Merchant policy evaluation: explicit allowlist, or `IdentityRegistry.ownerOf(agentId) == merchant` plus a minimum reputation score read from `ReputationRegistry`, plus optional tag match stored in our merchant metadata.
 - Duplicate-resource guard: same `resourceHash` more than K times in a window is rejected (this is what catches the "re-bought the same dataset 30 times" loop).
@@ -132,7 +140,7 @@ Both layers matter. If the vault has a bug, Kernel still caps calls and gas. If 
 
 ### 6.3 Settlement paths
 
-**Path A: standard x402 merchants (no merchant changes).** Most x402 merchants use the Coinbase facilitator with the `exact` scheme, which expects an EIP-3009 `transferWithAuthorization` signed by the payer. A smart account can satisfy this via ERC-1271 (USDC v2.2+ supports contract signatures), but then enforcement would depend on the signature policy rather than the vault. Solution: the Allowance Payer runs a *micro-float* model. The vault streams tiny prepaid tranches (for example $2 at a time, within policy) to a per-allowance EOA-like "spend key" account that signs EIP-3009 authorizations. Exposure is bounded by the tranche, the vault still enforces the cumulative budget on each refill, and every refill plus every settlement is in the receipts. This gets day-one compatibility with every existing x402 merchant on Arbitrum.
+**Path A: standard x402 merchants (no merchant changes).** Most x402 merchants use the Coinbase facilitator with the `exact` scheme, which expects an EIP-3009 `transferWithAuthorization` signed by the payer. A smart account can satisfy this via ERC-1271 (USDC v2.2+ supports contract signatures), but then enforcement would depend on the signature policy rather than the vault. Solution: the Allowance Payer runs a _micro-float_ model. The vault streams tiny prepaid tranches (for example $2 at a time, within policy) to a per-allowance EOA-like "spend key" account that signs EIP-3009 authorizations. Exposure is bounded by the tranche, the vault still enforces the cumulative budget on each refill, and every refill plus every settlement is in the receipts. This gets day-one compatibility with every existing x402 merchant on Arbitrum.
 
 **Path B: Allowance-native (strong guarantees).** Our own facilitator accepts a signed payment intent from the agent's session key, submits a UserOp calling `vault.pay`, and the merchant receives USDC directly from the vault. Merchants opt in by pointing their x402/MPP server at our facilitator (one config line). This path gives true per-call onchain enforcement and lets us attach ERC-8004 feedback to the settlement.
 
@@ -169,22 +177,22 @@ Build order for the hackathon: Path B first (it is the demo), Path A second (it 
 
 ## 7. Ecosystem integrations
 
-| Integration | Role | Status |
-|---|---|---|
-| ZeroDev Kernel + passkeys + paymaster | Owner account, session keys, policies, sponsored gas | Live on Arbitrum One and Robinhood Chain |
-| Coinbase x402 facilitator | Day-one merchant compatibility (Path A) | Live on Arbitrum |
-| `arbitrum-mpp` (Offchain Labs) | MPP charge method and reference server | Live, open source |
-| ERC-8004 registries | Agent and merchant identity, reputation, validation | Live on Arbitrum mainnet |
-| USDC (EIP-3009, Permit2) and USDG | Budget assets | Live |
-| Robinhood Chain | Second deployment, USDG allowances | Live |
-| Alchemy AA infra | Alternative bundler/paymaster on Robinhood Chain | Live |
-| Fhenix CoFHE (post Oct 21) | Confidential budgets: hide remaining balance from merchants while proving solvency | Roadmap |
+| Integration                           | Role                                                                               | Status                                   |
+| ------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------- |
+| ZeroDev Kernel + passkeys + paymaster | Owner account, session keys, policies, sponsored gas                               | Live on Arbitrum One and Robinhood Chain |
+| Coinbase x402 facilitator             | Day-one merchant compatibility (Path A)                                            | Live on Arbitrum                         |
+| `arbitrum-mpp` (Offchain Labs)        | MPP charge method and reference server                                             | Live, open source                        |
+| ERC-8004 registries                   | Agent and merchant identity, reputation, validation                                | Live on Arbitrum mainnet                 |
+| USDC (EIP-3009, Permit2) and USDG     | Budget assets                                                                      | Live                                     |
+| Robinhood Chain                       | Second deployment, USDG allowances                                                 | Live                                     |
+| Alchemy AA infra                      | Alternative bundler/paymaster on Robinhood Chain                                   | Live                                     |
+| Fhenix CoFHE (post Oct 21)            | Confidential budgets: hide remaining balance from merchants while proving solvency | Roadmap                                  |
 
 ## 8. Why judges may find it notable
 
 - It answers the question every judge has personally felt in 2026: "what stops my agent from spending everything?"
 - It is built almost entirely from primitives Arbitrum and Offchain Labs published this year, used together for the first time. That is the "we didn't realize our tech could be used like this" reaction.
-- It makes ERC-8004 reputation *do* something with money, which the Foundation's own ERC-8004 post asked for and nobody has shown.
+- It makes ERC-8004 reputation _do_ something with money, which the Foundation's own ERC-8004 post asked for and nobody has shown.
 - It has a visible failure demo. A blocked payment onstage is more memorable than a successful one.
 - It fits the Promising Products definition exactly: AI agents plus a new financial primitive.
 - Deploying on Robinhood Chain with USDG shows the sponsor's chain doing something Robinhood's own agentic product does not.
@@ -267,6 +275,7 @@ Second weakness: the enforcement story is only fully true on Path B. On Path A (
 **Position as the allowance layer, not a wallet.** Agent Allowance is explicitly multi-wallet and multi-rail: the owner's money can sit in a ZeroDev account today and in other smart accounts tomorrow, and the policy object is portable. Coinbase's product is a wallet for Coinbase's ecosystem on Base; ours is a policy primitive on Arbitrum that any wallet, agent framework, or merchant can adopt. Say this in the first 20 seconds.
 
 **Own three things competitors do not do:**
+
 1. **Merchant-side policy via onchain identity.** Nobody gates agent spend by ERC-8004 identity and reputation. Make this the headline differentiator and demo it.
 2. **Duplicate-resource and anomaly guards onchain.** Caps stop big mistakes; loops are made of small ones. Showing the loop being stopped is the moment.
 3. **Reputation that changes limits.** The two-sided reputation loop (owner gates merchants, merchants gate agents) is a network effect Coinbase's single-wallet model does not have.
@@ -279,31 +288,31 @@ Second weakness: the enforcement story is only fully true on Path B. On Path A (
 
 ## 17. Adversarial judge pass (tired, 150 submissions in)
 
-- *Have I seen this?* Agent wallets, yes, five today. An allowance with onchain merchant policy and a loop-stopper, no.
-- *What is actually novel?* Policy enforced by Kernel permissions plus a vault, merchant eligibility from ERC-8004 reputation, duplicate-resource guard, and reputation that raises limits. Four concrete things.
-- *Why does this require this sponsor?* It is assembled from x402-on-Arbitrum, arbitrum-mpp, ERC-8004-on-Arbitrum, and ZeroDev-on-Robinhood-Chain. Move it elsewhere and two of four pieces vanish.
-- *Product or demo?* Product: install is an env var, there is a merchant side, there is a subscription.
-- *Would anyone use it?* Anyone who has read a $47,000 invoice. The demand is documented.
-- *Can they prove it works?* Yes, live, with a visible rejection.
-- *What will I remember tomorrow?* The red "REJECTED" receipt and "total exposure: $20."
-- *Where is the magical moment?* The loop stopping by itself at 3 a.m. without anyone awake.
+- _Have I seen this?_ Agent wallets, yes, five today. An allowance with onchain merchant policy and a loop-stopper, no.
+- _What is actually novel?_ Policy enforced by Kernel permissions plus a vault, merchant eligibility from ERC-8004 reputation, duplicate-resource guard, and reputation that raises limits. Four concrete things.
+- _Why does this require this sponsor?_ It is assembled from x402-on-Arbitrum, arbitrum-mpp, ERC-8004-on-Arbitrum, and ZeroDev-on-Robinhood-Chain. Move it elsewhere and two of four pieces vanish.
+- _Product or demo?_ Product: install is an env var, there is a merchant side, there is a subscription.
+- _Would anyone use it?_ Anyone who has read a $47,000 invoice. The demand is documented.
+- _Can they prove it works?_ Yes, live, with a visible rejection.
+- _What will I remember tomorrow?_ The red "REJECTED" receipt and "total exposure: $20."
+- _Where is the magical moment?_ The loop stopping by itself at 3 a.m. without anyone awake.
 
 **Modifications from this pass:** lead the pitch with the rejection, not the architecture; put the merchant-reputation gating in the first minute; state the Path A caveat before a judge finds it; show Robinhood Chain for 15 seconds, not two minutes.
 
 ## 18. Build plan (for a team of two to three, roughly 10 days of focused work)
 
-| Day | Deliverable |
-|---|---|
-| 1 | AllowanceVault contract: budgets, caps, rate windows, allowlist, freeze, duplicate guard, events. Foundry tests. |
-| 2 | Kernel integration: owner passkey account, session key with call/rate/timestamp/gas policies scoped to `pay`. Deploy on Arbitrum Sepolia. |
-| 3 | Facilitator (Path B): verify intent, build UserOp, submit via bundler, confirm, write receipt. Demo merchant (x402 server using our facilitator). |
-| 4 | Payer SDK (TypeScript fetch wrapper) + MCP server with `pay_for` and `remaining_budget`. Demo agent script including the loop. |
-| 5 | Web app: passkey login, create allowance, connect snippets, receipts feed, freeze. |
-| 6 | ERC-8004: mint agent identity per allowance, merchant identity registration, feedback writes, merchant-policy checks in vault. |
-| 7 | Path A: micro-float spend key, tranche refills, EIP-3009 signing, test against a public x402 endpoint on Arbitrum via Coinbase facilitator. |
-| 8 | Robinhood Chain testnet deployment with USDG; alerts (Telegram); anomaly chips. |
-| 9 | Merchant console (minimal), reputation-gated limit demo, polish, metrics. |
-| 10 | Demo rehearsal, video, README with architecture diagram, honest limitations section. |
+| Day | Deliverable                                                                                                                                       |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | AllowanceVault contract: budgets, caps, rate windows, allowlist, freeze, duplicate guard, events. Foundry tests.                                  |
+| 2   | Kernel integration: owner passkey account, session key with call/rate/timestamp/gas policies scoped to `pay`. Deploy on Arbitrum Sepolia.         |
+| 3   | Facilitator (Path B): verify intent, build UserOp, submit via bundler, confirm, write receipt. Demo merchant (x402 server using our facilitator). |
+| 4   | Payer SDK (TypeScript fetch wrapper) + MCP server with `pay_for` and `remaining_budget`. Demo agent script including the loop.                    |
+| 5   | Web app: passkey login, create allowance, connect snippets, receipts feed, freeze.                                                                |
+| 6   | ERC-8004: mint agent identity per allowance, merchant identity registration, feedback writes, merchant-policy checks in vault.                    |
+| 7   | Path A: micro-float spend key, tranche refills, EIP-3009 signing, test against a public x402 endpoint on Arbitrum via Coinbase facilitator.       |
+| 8   | Robinhood Chain testnet deployment with USDG; alerts (Telegram); anomaly chips.                                                                   |
+| 9   | Merchant console (minimal), reputation-gated limit demo, polish, metrics.                                                                         |
+| 10  | Demo rehearsal, video, README with architecture diagram, honest limitations section.                                                              |
 
 Stretch: MPP `allowance` charge method on `arbitrum-mpp`; Morpho yield on idle USDG; validation-registry attestation of policy summary.
 

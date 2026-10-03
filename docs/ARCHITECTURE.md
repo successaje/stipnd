@@ -24,14 +24,14 @@ If either layer has a bug, the other still bounds exposure.
 
 ## Packages
 
-| Path | What | Stack |
-|---|---|---|
-| `packages/contracts` | `StipendHub`, `MerchantRegistry`, interfaces, deploy scripts, tests | Foundry |
-| `packages/sdk` | Agent-side client: holds the credential, handles `402` challenges, submits `pay()` UserOps, verifies receipts | TypeScript, viem, ZeroDev SDK |
-| `packages/protocol` | Shared types: challenge/receipt schema, policy encoding, chain config, ABIs | TypeScript |
-| `apps/web` | Owner app + merchant console + landing | Next.js (App Router), Tailwind v4, Motion, wagmi/viem, ZeroDev |
-| `apps/merchant` | Reference merchant: paid endpoints with `402` challenges, settlement verification middleware | Hono |
-| `apps/agent` | Reference agent runner used for demos and e2e tests (normal mode and loop mode) | Node |
+| Path                 | What                                                                                                          | Stack                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `packages/contracts` | `StipendHub`, `MerchantRegistry`, interfaces, deploy scripts, tests                                           | Foundry                                                        |
+| `packages/sdk`       | Agent-side client: holds the credential, handles `402` challenges, submits `pay()` UserOps, verifies receipts | TypeScript, viem, ZeroDev SDK                                  |
+| `packages/protocol`  | Shared types: challenge/receipt schema, policy encoding, chain config, ABIs                                   | TypeScript                                                     |
+| `apps/web`           | Owner app + merchant console + landing                                                                        | Next.js (App Router), Tailwind v4, Motion, wagmi/viem, ZeroDev |
+| `apps/merchant`      | Reference merchant: paid endpoints with `402` challenges, settlement verification middleware                  | Hono                                                           |
+| `apps/agent`         | Reference agent runner used for demos and e2e tests (normal mode and loop mode)                               | Node                                                           |
 
 ## Settlement flow (Stipnd scheme)
 

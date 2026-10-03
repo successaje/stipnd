@@ -22,7 +22,7 @@ Evidence-based reading:
 - **Stock Tokens used as more than tradeable things.** Robinhood's own docs enumerate what they hope you'll do: "Deposit NVDA as collateral and borrow USDG"; "any contract that accepts ERC-20s... an escrow, a vault... can hold it." They built ERC-8056 multipliers and Chainlink feeds so contracts can "read a current price directly instead of caring what time it is in New York." They want 24/7 composability demonstrated.
 - **Agentic finance with real settlement.** Offchain Labs shipped `arbitrum-mpp`, Coinbase's x402 facilitator supports Arbitrum, ERC-8004 registries are live on Arbitrum, Robinhood opened MCP servers for Trading and Banking with "Agentic Accounts." The "Promising Products" track names "AI agents, new financial primitives" explicitly.
 - **Stablecoin usefulness outside trading.** Prizes in USDG, Venmo PYUSD on Arbitrum, $5B+ stablecoin balances, Singapore's MAS stablecoin regime, 20,000 SMEs accepting stablecoins via HitPay/TripleA. Payments (payroll, cross-border, on/off-ramps) is a named vertical.
-- **Rust/C/C++ (Stylus) is a stated bonus**, but note: on **October 2, 2026** the Security Council paused *new* Stylus activations on Arbitrum One and Nova for a liveness bug. Testnets and Robinhood Chain are unaffected per public reporting, but any mainnet Stylus deployment plan should be treated as a risk and stated honestly.
+- **Rust/C/C++ (Stylus) is a stated bonus**, but note: on **October 2, 2026** the Security Council paused _new_ Stylus activations on Arbitrum One and Nova for a liveness bug. Testnets and Robinhood Chain are unaffected per public reporting, but any mainnet Stylus deployment plan should be treated as a risk and stated honestly.
 - **Winners that look like companies, not demos.** Past winners: Kustodia (escrow payments), Liquida (gilt collateral), Orbital AMM (stablecoin AMM in Stylus), AlphaGrid (AI prop trading on Robinhood Chain), Tilt (AI RWA management), EqualFi (RWA index baskets), Bond.Credit (agent underwriting). Pattern: financial infrastructure with a credible institutional or user wedge. Pure consumer toys have not won. Pure tooling has placed at best third.
 
 ## 3. Strategic ecosystem objectives
@@ -33,23 +33,23 @@ If this hackathon succeeds spectacularly, six months later Arbitrum wants people
 2. "Arbitrum is where agents actually settle money (x402/MPP/ERC-8004) and where they trade tokenized equities."
 3. "Programmable dollars on Arbitrum do something a bank app can't."
 4. "Arbitrum's chain stack (Orbit) is what serious institutions use, and builders follow institutions."
-5. Quietly: "Base has consumer distribution, but Arbitrum has the *assets*: 7,000+ tokenized RWAs, $227M tokenized stocks, gilts, treasuries."
+5. Quietly: "Base has consumer distribution, but Arbitrum has the _assets_: 7,000+ tokenized RWAs, $227M tokenized stocks, gilts, treasuries."
 
-What would make judges say "this is exactly why this technology exists": a product where a tokenized stock, a regulated stablecoin, and a smart contract do something *together* that a brokerage account, a bank account, and a spreadsheet cannot do, and that a normal person in Lagos, Manila, or Jakarta would use on a Tuesday.
+What would make judges say "this is exactly why this technology exists": a product where a tokenized stock, a regulated stablecoin, and a smart contract do something _together_ that a brokerage account, a bank account, and a spreadsheet cannot do, and that a normal person in Lagos, Manila, or Jakarta would use on a Tuesday.
 
 ## 4. Competitive landscape
 
-| Competitor / adjacent | What they do better | What Arbitrum + Robinhood Chain does better |
-|---|---|---|
-| **Base (Coinbase)** | Consumer distribution (120M Coinbase users), DAU leader, Farcaster/Zora culture, x402 origin | Depth of real financial assets; Robinhood's own chain; GMX/Pendle liquidity; Timeboost/PGA ordering |
-| **Solana (xStocks via Backed, Jupiter)** | Faster retail UX, xStocks on many DEXs, memecoin culture | Issuer-native chain; Chainlink feeds + ERC-8056 multipliers standardized; Ethereum settlement for institutions |
-| **Ondo Global Markets / Ondo Chain** | Institutional RWA distribution, broad asset list | Robinhood's retail brand; permissionless composability on an Orbit chain |
-| **Kraken Ink / xStocks** | Exchange distribution | Same as above; Arbitrum stack maturity |
-| **Converge (Ethena + Securitize)** | Institutional DeFi focus on Arbitrum stack | Shows the Orbit pattern; Robinhood Chain is the consumer version |
-| **Interactive Brokers / eToro / Revolut** | Fractional stocks, DRIP, auto-invest, social copy trading, round-ups | None of these let a third party program the asset; none run 24/7; none composable with stablecoin lending |
-| **Stripe/Bridge, Coinbase Commerce** | Merchant stablecoin acceptance | Arbitrum has MPP + x402 both; USDG regulated in SG and EU |
-| **Polymarket / Kalshi** | Event contracts at scale | Robinhood is adding event contracts to agentic accounts; opportunity for stock-linked structured products |
-| **Web2 agent platforms (OpenAI, Anthropic MCP ecosystem)** | Agent capability | No native money rail; x402/MPP on Arbitrum is the rail |
+| Competitor / adjacent                                      | What they do better                                                                          | What Arbitrum + Robinhood Chain does better                                                                    |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Base (Coinbase)**                                        | Consumer distribution (120M Coinbase users), DAU leader, Farcaster/Zora culture, x402 origin | Depth of real financial assets; Robinhood's own chain; GMX/Pendle liquidity; Timeboost/PGA ordering            |
+| **Solana (xStocks via Backed, Jupiter)**                   | Faster retail UX, xStocks on many DEXs, memecoin culture                                     | Issuer-native chain; Chainlink feeds + ERC-8056 multipliers standardized; Ethereum settlement for institutions |
+| **Ondo Global Markets / Ondo Chain**                       | Institutional RWA distribution, broad asset list                                             | Robinhood's retail brand; permissionless composability on an Orbit chain                                       |
+| **Kraken Ink / xStocks**                                   | Exchange distribution                                                                        | Same as above; Arbitrum stack maturity                                                                         |
+| **Converge (Ethena + Securitize)**                         | Institutional DeFi focus on Arbitrum stack                                                   | Shows the Orbit pattern; Robinhood Chain is the consumer version                                               |
+| **Interactive Brokers / eToro / Revolut**                  | Fractional stocks, DRIP, auto-invest, social copy trading, round-ups                         | None of these let a third party program the asset; none run 24/7; none composable with stablecoin lending      |
+| **Stripe/Bridge, Coinbase Commerce**                       | Merchant stablecoin acceptance                                                               | Arbitrum has MPP + x402 both; USDG regulated in SG and EU                                                      |
+| **Polymarket / Kalshi**                                    | Event contracts at scale                                                                     | Robinhood is adding event contracts to agentic accounts; opportunity for stock-linked structured products      |
+| **Web2 agent platforms (OpenAI, Anthropic MCP ecosystem)** | Agent capability                                                                             | No native money rail; x402/MPP on Arbitrum is the rail                                                         |
 
 Where Web2 stays dramatically better: onboarding, recurring payments (subscriptions, auto-invest), notifications, customer support, tax reporting, and "it just works" without gas. Where crypto wins: 24/7, composability, non-US global access to US equities exposure, programmable escrow, agent-native settlement.
 
@@ -66,11 +66,11 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 
 ## 6. Underused ecosystem strengths
 
-- **ERC-8056 `uiMultiplier()`**: the dividend/split multiplier is an onchain, readable, event-emitting number. Nobody is using it as a *primitive* (e.g., yield-stripping, dividend-triggered actions). Xero Protocol on GitHub is the only visible attempt.
+- **ERC-8056 `uiMultiplier()`**: the dividend/split multiplier is an onchain, readable, event-emitting number. Nobody is using it as a _primitive_ (e.g., yield-stripping, dividend-triggered actions). Xero Protocol on GitHub is the only visible attempt.
 - **Chainlink feeds for ~2,000 equities on a permissionless chain.** This is effectively a free, 24/7, composable stock-price oracle set. Options, structured products, conditional payments, insurance, and games can all key off it.
 - **USDG under MAS supervision + Morpho lending on Robinhood Chain.** A regulated yield-bearing dollar in the host country of the event.
 - **ZeroDev wallet SDK on Robinhood Chain**: gas sponsorship, session keys, passkeys (secp256r1 now spec-aligned after ArbOS Dia). The "no wallet, no gas, no seed phrase" demo is fully available.
-- **Robinhood MCP servers + Agentic Accounts.** An agent can hold a sandboxed brokerage balance *and* an onchain wallet. Hybrid off/on-chain agent strategies are possible today.
+- **Robinhood MCP servers + Agentic Accounts.** An agent can hold a sandboxed brokerage balance _and_ an onchain wallet. Hybrid off/on-chain agent strategies are possible today.
 - **96 KB contract size limit** on Robinhood Chain (4x Ethereum). Complex logic in one contract.
 - **MPP (`arbitrum-mpp`) settles with signed transfer authorizations**: the payer needs no gas, no prior approval. Agent-pays-for-API is a two-line integration.
 - **Fee predictability after ArbOS Dia** makes micro-transaction products viable without retry logic.
@@ -78,24 +78,25 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 
 ## 7. Obvious Idea Graveyard
 
-| Category | Why people build it | Why it's crowded | Typical implementation | What would make it interesting again |
-|---|---|---|---|---|
-| AI trading agent for Stock Tokens | Both sponsors scream "agents" | AlphaGrid already won London with this; every LLM demo does it | Chat → "buy NVDA" → swap on Uniswap | Agents that *don't* trade: agents that hedge payroll, rebalance a family savings plan, or compete under verifiable constraints with ERC-8004 reputation |
-| Lending market for Stock Tokens | Robinhood docs literally suggest it | Morpho already live; fork of Aave is trivial | Aave fork with NVDA collateral | Non-liquidation design (e.g., borrow against dividends only), or lending to *agents* with reputation-based LTV |
-| Tokenized RWA index/basket | EqualFi won with it | Dozens of ETF-on-chain clones | Set Protocol clone | Baskets as social objects (follow a person's basket), or baskets as payment units |
-| Stablecoin cross-border remittance app | Payments is a named track, EdenFi won | Hundreds submitted every Open House | Wallet + on/off ramp + "send" | Only if the money *does something* in transit (earns, escrows, converts to stock exposure) |
-| Prediction market | Robinhood event contracts, Laytus won | Polymarket shadow | Binary market on stock price | Stock-conditioned payouts embedded in other products rather than a market UI |
-| Portfolio dashboard / analytics | Dune sponsored before | Zero stickiness | Charts | Dashboards never win. Skip. |
-| Escrow / agentic commerce settlement | Kustodia won NYC; Kajota submitted here | Growing fast | Multi-party split contract | Only with a real demand side already using it |
-| Agent reputation / ERC-8004 registry tooling | Foundation blog asked for it | Infra, no demo moment | Registry + score | Reputation that gates *money* (LTV, credit lines) in a visible loop |
-| Copy/social trading | "Consumer: social trading" is listed | eToro exists; many will submit | Leaderboard + copy button | Copying a *rule*, not a person, with the rule executed by contract 24/7 |
-| Yield aggregator / ERC-4626 vault | Plexi won India | Infinite | Vault that farms Morpho USDG | No. |
-| Privacy pools / shielded transfers | Shinobi won India, Fhenix sponsor | Hard, mature teams | ZK mixer | Only with Fhenix confidential tokens for a specific finance use (payroll privacy) |
-| Options / perps on Stock Tokens | Lighter has perps; obvious derivative | Many | Oracle-settled binary options | Options packaged as consumer "protection" rather than trading |
+| Category                                     | Why people build it                     | Why it's crowded                                               | Typical implementation              | What would make it interesting again                                                                                                                    |
+| -------------------------------------------- | --------------------------------------- | -------------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AI trading agent for Stock Tokens            | Both sponsors scream "agents"           | AlphaGrid already won London with this; every LLM demo does it | Chat → "buy NVDA" → swap on Uniswap | Agents that _don't_ trade: agents that hedge payroll, rebalance a family savings plan, or compete under verifiable constraints with ERC-8004 reputation |
+| Lending market for Stock Tokens              | Robinhood docs literally suggest it     | Morpho already live; fork of Aave is trivial                   | Aave fork with NVDA collateral      | Non-liquidation design (e.g., borrow against dividends only), or lending to _agents_ with reputation-based LTV                                          |
+| Tokenized RWA index/basket                   | EqualFi won with it                     | Dozens of ETF-on-chain clones                                  | Set Protocol clone                  | Baskets as social objects (follow a person's basket), or baskets as payment units                                                                       |
+| Stablecoin cross-border remittance app       | Payments is a named track, EdenFi won   | Hundreds submitted every Open House                            | Wallet + on/off ramp + "send"       | Only if the money _does something_ in transit (earns, escrows, converts to stock exposure)                                                              |
+| Prediction market                            | Robinhood event contracts, Laytus won   | Polymarket shadow                                              | Binary market on stock price        | Stock-conditioned payouts embedded in other products rather than a market UI                                                                            |
+| Portfolio dashboard / analytics              | Dune sponsored before                   | Zero stickiness                                                | Charts                              | Dashboards never win. Skip.                                                                                                                             |
+| Escrow / agentic commerce settlement         | Kustodia won NYC; Kajota submitted here | Growing fast                                                   | Multi-party split contract          | Only with a real demand side already using it                                                                                                           |
+| Agent reputation / ERC-8004 registry tooling | Foundation blog asked for it            | Infra, no demo moment                                          | Registry + score                    | Reputation that gates _money_ (LTV, credit lines) in a visible loop                                                                                     |
+| Copy/social trading                          | "Consumer: social trading" is listed    | eToro exists; many will submit                                 | Leaderboard + copy button           | Copying a _rule_, not a person, with the rule executed by contract 24/7                                                                                 |
+| Yield aggregator / ERC-4626 vault            | Plexi won India                         | Infinite                                                       | Vault that farms Morpho USDG        | No.                                                                                                                                                     |
+| Privacy pools / shielded transfers           | Shinobi won India, Fhenix sponsor       | Hard, mature teams                                             | ZK mixer                            | Only with Fhenix confidential tokens for a specific finance use (payroll privacy)                                                                       |
+| Options / perps on Stock Tokens              | Lighter has perps; obvious derivative   | Many                                                           | Oracle-settled binary options       | Options packaged as consumer "protection" rather than trading                                                                                           |
 
 ## 8. Gap Map
 
 ### Missing (exists elsewhere, barely exists here)
+
 - **Auto-invest / round-ups / DRIP-style recurring buying** of equities exposure, in stablecoins, for non-US users. Revolut and Acorns do this; nothing on Robinhood Chain does.
 - **Payroll in dollars with a slice in stocks** (employee stock purchase plans for the gig/remote economy).
 - **Gifting and allowances** denominated in Stock Tokens (buy a kid "one Apple").
@@ -103,12 +104,14 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Subscription/standing-order primitives** for stablecoins (the "Web2 is better" cliff).
 
 ### Broken (exists, but UX/economics poor)
+
 - Stock Token trading needs a wallet, gas, bridging, and venue selection. ZeroDev fixes the first two but no one has built the "one tap" product.
 - Agent commerce demos require the agent to hold ETH for gas; MPP's signed-authorization flow fixes it but nobody has shown a consumer-visible result.
 - Lending against Stock Tokens exposes users to liquidation on 24/7 price; no "soft" credit products.
 - Reputation (ERC-8004) exists with no money attached to it.
 
 ### Newly Possible (recent primitive → new product)
+
 - **Onchain corporate-action multiplier (ERC-8056)** → dividend-triggered programmable actions; principal/yield splitting; "dividend streams" as payment sources.
 - **Chainlink feeds on 2,000 equities, 24/7, permissionless** → conditional payments, parametric products, stock-indexed contracts, games, and agreements keyed to real stock prices without a broker.
 - **MPP/x402 on Arbitrum with no-gas signed authorizations** → agents and humans paying per request; APIs that sell themselves.
@@ -118,21 +121,22 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Elara: Stylus contracts up to 96 KB** → full pricing engines (options, insurance) onchain (subject to the activation pause on One/Nova; Robinhood Chain and testnets fine).
 
 ### Misunderstood (powerful capability used boringly)
-- **Stock Tokens are being treated as things to trade.** They are *ERC-20s with a live price feed and a corporate action multiplier*. That makes them (a) collateral, (b) a unit of account for agreements, (c) a gift/payment object, (d) a programmable savings target, (e) an input to any conditional contract.
-- **Agents are being treated as traders.** The more valuable agent is a *payer*: an agent that buys data, compute, or services on your behalf with capped MPP spend, or an agent that enforces a financial rule for a household or small business.
-- **USDG is being treated as "the prize currency."** It is a MAS-regulated dollar with 7% Morpho yield on Robinhood Chain. That is a *savings account anyone in SEA can open with a passkey*.
+
+- **Stock Tokens are being treated as things to trade.** They are _ERC-20s with a live price feed and a corporate action multiplier_. That makes them (a) collateral, (b) a unit of account for agreements, (c) a gift/payment object, (d) a programmable savings target, (e) an input to any conditional contract.
+- **Agents are being treated as traders.** The more valuable agent is a _payer_: an agent that buys data, compute, or services on your behalf with capped MPP spend, or an agent that enforces a financial rule for a household or small business.
+- **USDG is being treated as "the prize currency."** It is a MAS-regulated dollar with 7% Morpho yield on Robinhood Chain. That is a _savings account anyone in SEA can open with a passkey_.
 - **ERC-8004 is treated as a registry.** It is a credit bureau for agents if you attach money to it.
 
 ## 9. Important primitives
 
-1. **Stock Token ERC-20 + Chainlink `latestRoundData()` + `uiMultiplier()` + `oraclePaused()`** — 24/7 composable equities exposure with onchain corporate actions. *Stop thinking like a blockchain dev:* "a stock that can sit inside any contract and always knows its own price." *Human behavior it improves:* saving toward goals, gifting, paying people partly in equity, settling bets and agreements. *Hides the chain:* yes, with ZeroDev.
-2. **USDG + Morpho lending on Robinhood Chain** — regulated yield dollar. *Human behavior:* "put money aside." *Hides chain:* yes.
-3. **MPP / x402 signed-authorization payments** — pay-per-call without gas or approvals. *Human behavior:* buying small things from software. *Hides chain:* completely.
-4. **ZeroDev smart accounts** (passkeys, session keys, gas sponsorship) — *Human behavior:* "log in with Face ID, let my agent spend up to $20." 
-5. **ERC-8004 identity/reputation/validation registries** — *Human behavior:* "is this agent trustworthy enough to lend to?"
-6. **Robinhood MCP Trading/Banking + Agentic Accounts** — brokerage sandbox for agents. *Hides chain:* the chain becomes the agent's 24/7 overflow venue.
+1. **Stock Token ERC-20 + Chainlink `latestRoundData()` + `uiMultiplier()` + `oraclePaused()`** — 24/7 composable equities exposure with onchain corporate actions. _Stop thinking like a blockchain dev:_ "a stock that can sit inside any contract and always knows its own price." _Human behavior it improves:_ saving toward goals, gifting, paying people partly in equity, settling bets and agreements. _Hides the chain:_ yes, with ZeroDev.
+2. **USDG + Morpho lending on Robinhood Chain** — regulated yield dollar. _Human behavior:_ "put money aside." _Hides chain:_ yes.
+3. **MPP / x402 signed-authorization payments** — pay-per-call without gas or approvals. _Human behavior:_ buying small things from software. _Hides chain:_ completely.
+4. **ZeroDev smart accounts** (passkeys, session keys, gas sponsorship) — _Human behavior:_ "log in with Face ID, let my agent spend up to $20."
+5. **ERC-8004 identity/reputation/validation registries** — _Human behavior:_ "is this agent trustworthy enough to lend to?"
+6. **Robinhood MCP Trading/Banking + Agentic Accounts** — brokerage sandbox for agents. _Hides chain:_ the chain becomes the agent's 24/7 overflow venue.
 7. **Predictable fees post-Dia** — micro-transactions and many small scheduled txs.
-8. **Fhenix CoFHE** — compute on encrypted amounts. *Human behavior:* "pay people without everyone seeing salaries."
+8. **Fhenix CoFHE** — compute on encrypted amounts. _Human behavior:_ "pay people without everyone seeing salaries."
 9. **Stylus (96 KB)** — heavy math onchain: options pricing, actuarial tables, portfolio optimizers. Use on Robinhood Chain/testnet.
 10. **Orbit chain stack** — Robinhood Chain is itself the demo that "serious institutions pick Arbitrum"; building there is ecosystem alignment by construction.
 
@@ -150,6 +154,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 ## 11. Concept portfolio (16 concepts)
 
 ### C1. Ang Bao — stock gifting in a link
+
 - **One line:** Send anyone a fraction of a real stock through a link or QR; they claim it with Face ID, no app, no wallet, no bank.
 - **Insight:** Gifting equity is a strong cultural behavior in Asia (red packets) and in the West (gift a share), but cross-border it is nearly impossible. Stock Tokens + ZeroDev passkeys make it a 10-second flow.
 - **User:** Relatives abroad, employers giving bonuses, creators rewarding fans.
@@ -159,10 +164,11 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Novelty:** Equity as a social object; claim-with-passkey escrow; the gift grows via `uiMultiplier` (dividends reinvested) so the gift is "alive."
 - **Loop:** Every gift creates a new wallet holder who can gift onward. Receiver → sender.
 - **Demo:** Judge receives an ang bao on their phone during the pitch and owns 0.01 NVDA within 15 seconds.
-- **Buildability:** High. Escrow contract + ZeroDev + Chainlink display. 
+- **Buildability:** High. Escrow contract + ZeroDev + Chainlink display.
 - **Risks:** Legal eligibility by jurisdiction; "gift card" comparisons; need to show it's not just a wallet.
 
 ### C2. Stock Sprint — rule-based auto-invest for stablecoin earners
+
 - **One line:** Set a rule like "every Friday, move $20 of my USDG into AAPL, and double it if AAPL is down 5% that week," and a contract runs it forever.
 - **Insight:** DRIP/round-ups are the stickiest retail finance features, and there is no such thing for non-US users with stablecoins. Chainlink feeds make conditional rules trivial.
 - **User:** Remote workers and freelancers in SEA/LatAm/Africa paid in stablecoins.
@@ -176,6 +182,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Risks:** "Just a DCA bot"; must emphasize goal/rule UX and yield-while-waiting.
 
 ### C3. PaySlice — payroll with an equity slice
+
 - **One line:** Employers pay global contractors in USDG and let each worker auto-convert a chosen percentage into Stock Tokens, like an ESPP for the remote economy.
 - **Insight:** Remote workforces want wealth-building, not just pay; employers want retention tools; Stock Tokens make "pay in Apple" legal-light and instant.
 - **User:** Startups paying contractors in SEA/Africa/LatAm; the contractors.
@@ -189,6 +196,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Risks:** B2B sales cycle; needs a live employer at Founder House.
 
 ### C4. Collateral Card — borrow against stocks for everyday spending (with soft liquidation)
+
 - **One line:** Spend USDG against your Stock Tokens with a conservative LTV and a "grace repair" period instead of instant liquidation.
 - **Insight:** Lending markets on Robinhood Chain are built for traders. Consumers want a Lombard loan with safety rails.
 - **Why here:** 24/7 feeds, `oraclePaused()` handling, Morpho liquidity.
@@ -196,6 +204,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Risks:** Lending is crowded; must differentiate on consumer safety.
 
 ### C5. Agent Allowance — session-keyed spending caps for AI agents
+
 - **One line:** Give any AI agent a passkey-approved wallet with a budget, allowed merchants, and per-call limits; it pays via MPP/x402 and you watch every receipt.
 - **Insight:** The scary part of agents is money. ZeroDev session keys + MPP signed authorizations = a parental-controls layer for agents.
 - **User:** Anyone running Claude/ChatGPT agents that need to buy data/compute; developers.
@@ -208,6 +217,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Risks:** Looks like a wallet; must lead with policy + receipts.
 
 ### C6. Oracle Promises — conditional payments keyed to real stock prices
+
 - **One line:** Write a payment that only happens if a market condition is true: "Pay my cofounder $5K if TSLA is above $X on Oct 31," settled by Chainlink feeds.
 - **Insight:** Stock-conditioned agreements (earn-outs, bonuses, bets, hedges) are everywhere in business and impossible to self-execute today.
 - **Why here:** 2,000 feeds, 24/7, cheap.
@@ -215,50 +225,60 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 - **Risks:** Prediction-market adjacency; stay on agreements, not trading.
 
 ### C7. Dividend Faucet — stream the growth, keep the stock
+
 - **One line:** Deposit Stock Tokens; the `uiMultiplier` growth (reinvested dividends) is tokenized separately and can be streamed to someone else.
 - **Insight:** ERC-8056 multiplier is an onchain dividend ledger nobody uses. Xero Protocol attempted principal/yield split; the consumer version is "give my parents the dividends, keep the shares."
 - **Risks:** Xero exists (GitHub); differentiate with streaming to recipients and gifting.
 
 ### C8. Basket Chat — group-chat investing
+
 - **One line:** A group of friends creates a shared basket of Stock Tokens; contributions and rebalances happen through chat commands; everyone holds a proportional ERC-20.
 - **Insight:** Investing is social in SEA (Telegram/Discord groups); baskets are already a proven winner (EqualFi) but not social.
 - **Risks:** Marketplace/social gravity; keep it to one basket per group.
 
 ### C9. Hedge Me — one-tap life hedges
+
 - **One line:** "I'm paid in USD, live in the Philippines, and work for a tech startup" → a personal hedge made from Stock Tokens, USDG, and simple options settled on feeds.
 - **Novelty:** Hedging as a consumer product; Stylus for pricing on Robinhood Chain.
 - **Risks:** Complex; may be a 2-minute demo rather than 30 seconds.
 
 ### C10. Agent Credit Bureau — ERC-8004 reputation that gates money
+
 - **One line:** Agents earn onchain credit limits from verified performance; lenders fund agent working capital against reputation.
 - **Insight:** Foundation asked for reputation layers; Bond.Credit won on agent underwriting. The gap is a visible loop where reputation changes credit in real time.
 - **Risks:** Infra-shaped; needs demo of money moving on a reputation event.
 
 ### C11. Merchant Float — USDG acceptance that earns until you need it
+
 - **One line:** Singapore/SEA merchants accept USDG at the counter; float automatically earns on Morpho and auto-pays suppliers on invoice due dates.
 - **Why here:** USDG is MAS-regulated; Robinhood Earn rails.
 - **Risks:** Payments graveyard; must lead with the treasury automation.
 
 ### C12. StockQuest — a game where the pieces are real stocks
+
 - **One line:** A fantasy-league style game where each pick locks a tiny real Stock Token position and the leaderboard is settled by Chainlink feeds, 24/7.
 - **Insight:** Fantasy finance apps are sticky; using real tokens means winners actually own something.
 - **Risks:** Gambling optics; keep stakes tiny and educational.
 
 ### C13. Receipt Rail — agent-to-business invoices via MPP
+
 - **One line:** Any API or SaaS can add one header and get paid per request in USDG by agents, with a human-readable receipt ledger.
 - **Insight:** Offchain Labs published the code; nobody has made the merchant side delightful.
 - **Risks:** Developer-tool gravity; needs a consumer-visible moment.
 
 ### C14. Night Shift — 24/7 price protection for the Robinhood-eligible world
+
 - **One line:** Buy overnight "insurance" on your Stock Tokens (a put) for the hours US markets are closed, priced by a Stylus engine on Robinhood Chain.
 - **Insight:** 24/7 trading creates a new risk window nobody hedges.
 - **Risks:** Derivatives complexity; liquidity for the other side.
 
 ### C15. Private Payroll (Fhenix)
+
 - **One line:** Salaries settle in USDG with encrypted amounts; auditors get selective disclosure.
 - **Risks:** Fhenix mainnet lands Oct 21 (after the Buildathon). Good Founder House story, hard Buildathon demo.
 
 ### C16. Family Office in a Chat
+
 - **One line:** A household finance agent that holds an Agentic Account on Robinhood and a wallet on Robinhood Chain and enforces house rules ("never more than 30% in one stock; keep 3 months of USDG").
 - **Risks:** Agent-trader gravity; must demo rule enforcement, not trading.
 
@@ -282,7 +302,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 4. **Screens:** Send (3 fields), Link/QR, Claim, "My gifts" portfolio, Regift.
 5. **Architecture:** `GiftEscrow` contract on Robinhood Chain holding Stock Tokens keyed to a claim hash (link secret); swap USDG → Stock Token via Uniswap/Rialto router at send time; ZeroDev account factory for recipients with passkey signer; paymaster for gas; Chainlink feed + `uiMultiplier()` for display; Robinhood REST (`/rhj/`) for metadata.
 6. **Integrations:** Robinhood Chain, ZeroDev, Uniswap, Chainlink, USDG.
-7. **Why judges notice:** Visible, emotional, on Robinhood Chain, uses Stock Tokens as *objects* not trades, creates new wallet holders (growth metric Robinhood cares about).
+7. **Why judges notice:** Visible, emotional, on Robinhood Chain, uses Stock Tokens as _objects_ not trades, creates new wallet holders (growth metric Robinhood cares about).
 8. **Business model:** Small spread on the USDG→stock swap; premium gift cards/corporate bulk gifting.
 9. **Path to product:** Corporate gifting (employee bonuses in stock), creator tipping in stock, holiday campaigns (Lunar New Year 2027 is Feb 17).
 10. **Distribution:** Every gift is an acquisition; links spread through WhatsApp/Telegram/LINE.
@@ -290,7 +310,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 12. **2-minute demo:** Add: regift to another judge; show escrow refund timer; show multiplier growth from a dividend event on testnet; show corporate bulk send CSV.
 13. **Don't build:** On-ramp integrations, multiple chains, social feed, NFT wrappers.
 14. **Biggest weakness:** "Is this just a wallet with a link?" and jurisdiction eligibility.
-15. **Strengthen:** Position as *gift escrow with lifecycle* (expiry, refund, regift, bulk); show a geo-eligibility check at claim time using Robinhood's eligible-country list; show that sending to someone with no crypto takes under 15 seconds.
+15. **Strengthen:** Position as _gift escrow with lifecycle_ (expiry, refund, regift, bulk); show a geo-eligibility check at claim time using Robinhood's eligible-country list; show that sending to someone with no crypto takes under 15 seconds.
 
 ### Deep dive 2 — Stock Sprint (conditional auto-invest with yield while waiting)
 
@@ -308,7 +328,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 12. **2-minute demo:** Create rule from natural language; show session-key permission scope; show goal completion.
 13. **Don't build:** Multi-chain, token launch, social feed, 50 rule types (ship 3).
 14. **Weakness:** "DCA bot" perception.
-15. **Strengthen:** Make rules *conditional and goal-bound* (not just periodic), and show the yield-while-waiting delta explicitly in dollars.
+15. **Strengthen:** Make rules _conditional and goal-bound_ (not just periodic), and show the yield-while-waiting delta explicitly in dollars.
 
 ### Deep dive 3 — Agent Allowance (policy-enforced money for AI agents)
 
@@ -326,7 +346,7 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 12. **2-minute demo:** Show session-key policy onchain, revoke live, reputation attestation after the purchase.
 13. **Don't build:** Your own agent, your own marketplace, token.
 14. **Weakness:** Wallet-shaped; crowded "agentic payments" space.
-15. **Strengthen:** Make the *policy* and *receipts* the product; demo with a real external MPP merchant.
+15. **Strengthen:** Make the _policy_ and _receipts_ the product; demo with a real external MPP merchant.
 
 ### Deep dive 4 — Oracle Promises (market-conditioned agreements)
 
@@ -366,15 +386,15 @@ Where Web2 stays dramatically better: onboarding, recurring payments (subscripti
 
 ## 14. Adversarial judge review
 
-**Ang Bao.** *Seen it?* Gift links yes; stock gift links to no-wallet recipients, no. *Novel?* Equity as a claimable social object with escrow lifecycle. *Why this sponsor?* Only works because Stock Tokens are permissionless ERC-20s on Robinhood Chain. *Product or demo?* Product. *Would anyone use it?* Lunar New Year alone. *Prove it works?* Live claim on judge's phone. *Remember tomorrow?* Yes, if a judge owns stock from it. *Magic moment:* claiming with Face ID. **Modification:** Add corporate bulk send so it's not "just consumer," and show the eligibility gate so the compliance-aware judge relaxes.
+**Ang Bao.** _Seen it?_ Gift links yes; stock gift links to no-wallet recipients, no. _Novel?_ Equity as a claimable social object with escrow lifecycle. _Why this sponsor?_ Only works because Stock Tokens are permissionless ERC-20s on Robinhood Chain. _Product or demo?_ Product. _Would anyone use it?_ Lunar New Year alone. _Prove it works?_ Live claim on judge's phone. _Remember tomorrow?_ Yes, if a judge owns stock from it. _Magic moment:_ claiming with Face ID. **Modification:** Add corporate bulk send so it's not "just consumer," and show the eligibility gate so the compliance-aware judge relaxes.
 
-**Stock Sprint.** *Seen it?* DCA bots, yes. *Novel?* Conditional rules on real equity feeds with yield while waiting. *Sponsor?* USDG + Stock Tokens + Morpho. *Product?* Yes. *Use?* Freelancers. *Prove?* Rule firing live. *Remember?* Medium. **Modification:** Lead with goals and conditions, show the dollars earned while waiting, and ship "copy this rule" links to make it spread.
+**Stock Sprint.** _Seen it?_ DCA bots, yes. _Novel?_ Conditional rules on real equity feeds with yield while waiting. _Sponsor?_ USDG + Stock Tokens + Morpho. _Product?_ Yes. _Use?_ Freelancers. _Prove?_ Rule firing live. _Remember?_ Medium. **Modification:** Lead with goals and conditions, show the dollars earned while waiting, and ship "copy this rule" links to make it spread.
 
-**Agent Allowance.** *Seen it?* Agent wallets, yes. *Novel?* Onchain policy via session keys + MPP receipts + ERC-8004 identity. *Sponsor?* Uses three Arbitrum-published primitives. *Product?* Developer product with consumer-readable receipts. *Prove?* Overspend blocked live. *Remember?* Yes, the "blocked" moment. **Modification:** Demo against an external MPP merchant, not your own mock, and add a one-tap freeze.
+**Agent Allowance.** _Seen it?_ Agent wallets, yes. _Novel?_ Onchain policy via session keys + MPP receipts + ERC-8004 identity. _Sponsor?_ Uses three Arbitrum-published primitives. _Product?_ Developer product with consumer-readable receipts. _Prove?_ Overspend blocked live. _Remember?_ Yes, the "blocked" moment. **Modification:** Demo against an external MPP merchant, not your own mock, and add a one-tap freeze.
 
-**Oracle Promises.** *Seen it?* Prediction markets, yes. *Novel?* Named-counterparty agreements, not markets. *Sponsor?* Needs equity feeds on a permissionless chain. *Product?* Yes, templates. *Use?* Startups, sales teams. *Prove?* Live settlement. *Remember?* Yes if the use case is relatable. **Modification:** Lead with earn-out/bonus templates and ban public pools in the demo.
+**Oracle Promises.** _Seen it?_ Prediction markets, yes. _Novel?_ Named-counterparty agreements, not markets. _Sponsor?_ Needs equity feeds on a permissionless chain. _Product?_ Yes, templates. _Use?_ Startups, sales teams. _Prove?_ Live settlement. _Remember?_ Yes if the use case is relatable. **Modification:** Lead with earn-out/bonus templates and ban public pools in the demo.
 
-**PaySlice.** *Seen it?* Payroll in stablecoins, yes. *Novel?* Equity slice + privacy roadmap. *Sponsor?* Yes. *Product?* Yes. *Use?* If an employer is onstage. *Prove?* Batch run. *Remember?* Only with a design partner. **Modification:** Bring a real employer or merge into Stock Sprint as the "employer" tier.
+**PaySlice.** _Seen it?_ Payroll in stablecoins, yes. _Novel?_ Equity slice + privacy roadmap. _Sponsor?_ Yes. _Product?_ Yes. _Use?_ If an employer is onstage. _Prove?_ Batch run. _Remember?_ Only with a design partner. **Modification:** Bring a real employer or merge into Stock Sprint as the "employer" tier.
 
 **Portfolio-level verdict for the Buildathon (deadline tomorrow):** Build **Ang Bao** as the submission with a Stock Sprint "gift that keeps buying" option only if time allows. It is the shortest path to a memorable demo on Robinhood Chain and lands on a reserved podium lane. **Agent Allowance** is the strongest Promising Products entry if you prefer the agent track. For **Founder House**, Ang Bao + PaySlice as a two-sided "equity for the remote world" company is a coherent pitch.
 
@@ -391,7 +411,7 @@ A merchant QR that prices goods in a Stock Token ("this coffee is 0.001 NVDA") a
 
 ## 16. Final synthesis
 
-**Unusually promising:** Products that treat Stock Tokens as *objects* (gifts, salary slices, promises, collateral with soft rails) rather than trading pairs; products that put onchain policy around agents' money; anything where USDG earns while it waits for a rule to fire. These align with reserved Robinhood Chain podium spots, the Promising Products track, and the Foundation's "real problem, validated users" filter.
+**Unusually promising:** Products that treat Stock Tokens as _objects_ (gifts, salary slices, promises, collateral with soft rails) rather than trading pairs; products that put onchain policy around agents' money; anything where USDG earns while it waits for a rule to fire. These align with reserved Robinhood Chain podium spots, the Promising Products track, and the Foundation's "real problem, validated users" filter.
 
 **Overcrowded:** AI trading agents, Stock Token lending forks, RWA baskets, generic remittance apps, dashboards, prediction markets, yield vaults, generic escrow.
 
