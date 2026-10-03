@@ -1,6 +1,7 @@
 "use client";
 
-import { Store } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, Store } from "lucide-react";
 import { formatAmount, shortAddress } from "@stipnd/protocol";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -29,41 +30,36 @@ export default function MerchantsPage() {
         ) : merchants.data && merchants.data.length > 0 ? (
           <ul className="divide-y divide-line">
             {merchants.data.map((m) => (
-              <li key={m.address} className="flex items-center gap-4 px-4 py-4 sm:px-5">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-line bg-paper-2 text-ink-2">
-                  <Store className="size-4" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="truncate text-[15px] font-semibold">{m.name}</p>
-                    {m.tags.map((t) => (
-                      <Pill key={t} className="h-5 px-1.5 text-[11px]">
-                        {t}
-                      </Pill>
-                    ))}
+              <li key={m.address}>
+                <Link
+                  href={`/app/merchants/${m.address}`}
+                  className="group flex items-center gap-4 px-4 py-4 transition-colors hover:bg-paper-2/60 sm:px-5"
+                >
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-line bg-paper-2 text-ink-2">
+                    <Store className="size-4" />
                   </div>
-                  <p className="mt-0.5 truncate text-sm text-ink-3">
-                    {m.url ? (
-                      <a
-                        href={m.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="hover:text-ink hover:underline"
-                      >
-                        {m.url.replace(/^https?:\/\//, "")}
-                      </a>
-                    ) : (
-                      shortAddress(m.address, 6)
-                    )}
-                  </p>
-                </div>
-                <div className="text-right text-sm">
-                  <p className="font-mono tabular">{m.settlements} settled</p>
-                  <p className="text-xs text-ink-3">
-                    {formatAmount(m.volume, appConfig.token.decimals)} {appConfig.token.symbol}{" "}
-                    volume
-                  </p>
-                </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="truncate text-[15px] font-semibold">{m.name}</p>
+                      {m.tags.map((t) => (
+                        <Pill key={t} className="h-5 px-1.5 text-[11px]">
+                          {t}
+                        </Pill>
+                      ))}
+                    </div>
+                    <p className="mt-0.5 truncate text-sm text-ink-3">
+                      {m.url ? m.url.replace(/^https?:\/\//, "") : shortAddress(m.address, 6)}
+                    </p>
+                  </div>
+                  <div className="hidden text-right text-sm sm:block">
+                    <p className="font-mono tabular">{m.settlements} settled</p>
+                    <p className="text-xs text-ink-3">
+                      {formatAmount(m.volume, appConfig.token.decimals)} {appConfig.token.symbol}{" "}
+                      volume
+                    </p>
+                  </div>
+                  <ChevronRight className="size-4 shrink-0 text-ink-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </li>
             ))}
           </ul>
@@ -71,7 +67,7 @@ export default function MerchantsPage() {
           <EmptyState
             icon={<Store className="size-4" />}
             title="No merchants registered yet"
-            description="The directory is empty on this deployment. Merchants register themselves from the merchant console; stipends in 'Any merchant' mode work without it."
+            description="The directory is empty on this deployment. Merchants register from their server key with the register script in apps/merchant. Stipends in 'Any merchant' mode work without it."
           />
         )}
       </Card>

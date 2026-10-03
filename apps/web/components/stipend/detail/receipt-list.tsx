@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, ExternalLink, Receipt as ReceiptIcon } from "lucide-react";
 import {
@@ -188,8 +189,10 @@ function ReceiptDetails({ r, merchant }: { r: Receipt; merchant?: Merchant }) {
       <div>
         <dt className="text-ink-3">Merchant</dt>
         <dd className="mt-0.5 font-mono text-[12px] text-ink">
-          {merchant ? `${merchant.name} · ` : ""}
-          {r.merchant}
+          <Link href={`/app/merchants/${r.merchant}`} className="hover:underline">
+            {merchant ? `${merchant.name} · ` : ""}
+            {r.merchant}
+          </Link>
         </dd>
       </div>
       <div>
