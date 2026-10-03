@@ -1,0 +1,17 @@
+{
+  "name": "@stipnd/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stipnd onchain contracts: StipendHub and MerchantRegistry (Foundry).",
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test -vv",
+    "test:gas": "forge test --gas-report",
+    "fmt": "forge fmt",
+    "lint": "forge fmt --check",
+    "typecheck": "forge build",
+    "abi:export": "node ./scripts/export-abi.mjs",
+    "deploy:local": "forge script script/DeployLocal.s.sol --rpc-url local --broadcast",
+    "deploy:arbitrum-sepolia": "forge script script/Deploy.s.sol --rpc-url arbitrum_sepolia --broadcast --verify"
+  }
+}
