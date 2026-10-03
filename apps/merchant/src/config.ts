@@ -1,5 +1,5 @@
 import { isAddress, type Address } from "viem";
-import { getChainInfo } from "@stipnd/protocol";
+import { getChainInfo, getDeployment } from "@stipnd/protocol";
 
 function required(name: string): string {
   const v = process.env[name];
@@ -32,11 +32,15 @@ export interface MerchantConfig {
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): MerchantConfig {
   const chainId = Number(env.MERCHANT_CHAIN_ID ?? env.NEXT_PUBLIC_CHAIN_ID ?? 421614);
   const info = getChainInfo(chainId);
+  const known = getDeployment(chainId);
   const token =
-    env.MERCHANT_TOKEN_ADDRESS ?? env.NEXT_PUBLIC_TOKEN_ADDRESS ?? info.defaultToken?.address;
+    env.MERCHANT_TOKEN_ADDRESS ??
+    env.NEXT_PUBLIC_TOKEN_ADDRESS ??
+    known?.token.address ??
+    info.defaultToken?.address;
   if (!token || !isAddress(token))
     throw new Error("Set MERCHANT_TOKEN_ADDRESS (or NEXT_PUBLIC_TOKEN_ADDRESS).");
-  const hub = env.MERCHANT_HUB_ADDRESS ?? env.NEXT_PUBLIC_STIPEND_HUB_ADDRESS;
+  const hub = env.MERCHANT_HUB_ADDRESS ?? env.NEXT_PUBLIC_STIPEND_HUB_ADDRESS ?? known?.stipendHub;
   if (!hub || !isAddress(hub))
     throw new Error("Set MERCHANT_HUB_ADDRESS (or NEXT_PUBLIC_STIPEND_HUB_ADDRESS).");
   return {

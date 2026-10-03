@@ -6,3 +6,6 @@ packages:
 allowBuilds:
   esbuild: true
   sharp: true
+
+minimumReleaseAgeExclude:
+  - lucide-react@1.51.0

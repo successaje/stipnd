@@ -6,4 +6,6 @@ coverage
 packages/contracts/out
 packages/contracts/cache
 packages/contracts/lib
+packages/contracts/broadcast
+packages/contracts/deployments
 pnpm-lock.yaml

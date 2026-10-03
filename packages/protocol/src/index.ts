@@ -4,5 +4,6 @@ export * from "./resource";
 export * from "./challenge";
 export * from "./credential";
 export * from "./format";
+export * from "./deployments";
 export * from "./abi/generated";
 export { erc20Abi } from "viem";

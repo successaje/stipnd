@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/*
+  Stipnd design tokens.
+  Personality: a ledger, not a dashboard. Warm paper, ink, one green for money that moved,
+  one red for money that was refused. Numbers are monospaced. Motion is short and purposeful.
+*/
+@theme {
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-paper: #f7f6f2;
+  --color-paper-2: #efede7;
+  --color-paper-3: #e6e3da;
+  --color-surface: #ffffff;
+  --color-ink: #17160f;
+  --color-ink-2: #4b4940;
+  --color-ink-3: #8b887c;
+  --color-ink-4: #b4b1a5;
+  --color-line: #ddd9cf;
+  --color-line-2: #cac5b8;
+
+  --color-money: #1f6f4a;
+  --color-money-ink: #0f3d29;
+  --color-money-soft: #e3f0e8;
+  --color-refuse: #c23f1d;
+  --color-refuse-ink: #7a2410;
+  --color-refuse-soft: #f8e5df;
+  --color-warn: #b2761a;
+  --color-warn-soft: #f6ecd9;
+  --color-info-soft: #e7ebf2;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --shadow-card: 0 1px 2px rgb(23 22 15 / 0.04), 0 0 0 1px rgb(23 22 15 / 0.05);
+  --shadow-pop: 0 12px 32px -12px rgb(23 22 15 / 0.25), 0 0 0 1px rgb(23 22 15 / 0.06);
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --animate-rise: rise 320ms var(--ease-out-quart) both;
+  --animate-fade: fade 220ms ease-out both;
+  --animate-pulse-soft: pulse-soft 1.6s ease-in-out infinite;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-paper text-ink font-sans;
+    font-feature-settings:
+      "ss01" on,
+      "cv11" on;
+  }
+  ::selection {
+    background: var(--color-money-soft);
+    color: var(--color-money-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .hairline {
+    @apply border-line;
+  }
+  .ledger-dots {
+    background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+}
