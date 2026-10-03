@@ -1,0 +1,47 @@
+{
+  "name": "@stipnd/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stipnd owner app, merchant console, and landing page.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "prettier --check app components lib",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-tooltip": "^1.2.12",
+    "@stipnd/protocol": "workspace:*",
+    "@stipnd/sdk": "workspace:*",
+    "@tanstack/react-query": "^5.104.1",
+    "@zerodev/ecdsa-validator": "^5.4.9",
+    "@zerodev/passkey-validator": "^5.6.0",
+    "@zerodev/permissions": "^5.6.3",
+    "@zerodev/sdk": "^5.5.10",
+    "@zerodev/webauthn-key": "^5.5.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.51.0",
+    "motion": "^14.0.0",
+    "next": "^16.3.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.3.1",
+    "tslib": "^2.8.1",
+    "viem": "^2.57.2",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.2",
+    "vitest": "^5.0.3"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": "C:\\Users\\succe\\AppData\\Local\\pnpm\\pnpm.cmd",
+      "runtimeArgs": ["--filter", "@stipnd/web", "dev", "--port", "3000"],
+      "port": 3000
+    },
+    {
+      "name": "merchant",
+      "runtimeExecutable": "C:\\Users\\succe\\AppData\\Local\\pnpm\\pnpm.cmd",
+      "runtimeArgs": ["--filter", "@stipnd/merchant", "dev"],
+      "port": 4020
+    }
+  ]
+}
