@@ -6,6 +6,7 @@ An agent gets a _stipend_: a fixed sum of USDC, for a stated purpose, refilled o
 
 Built for Arbitrum Open House Singapore on Arbitrum Sepolia with ZeroDev smart accounts, HTTP 402 payments, and the Stipnd merchant registry (ERC-8004 ready).
 
+- Live app: https://stipnd.vercel.app (Arbitrum Sepolia; passkey sign-in)
 - Live contracts: see [docs/DEPLOYMENTS.md](docs/DEPLOYMENTS.md)
 - Product model: [docs/PRODUCT.md](docs/PRODUCT.md) · Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Build log: [docs/BUILD_LOG.md](docs/BUILD_LOG.md)
 

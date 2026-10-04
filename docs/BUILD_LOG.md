@@ -24,5 +24,5 @@ Milestones, in order. Checked when merged to `main`.
 - [ ] Loading / error / empty state audit
 - [ ] Responsive and motion audit
 - [ ] Accessibility pass (focus order, labels, contrast)
-- [ ] Production web deployment
+- [x] Production web deployment: https://stipnd.vercel.app (2026-10-04)
 - [ ] Demo narrative and recording notes
