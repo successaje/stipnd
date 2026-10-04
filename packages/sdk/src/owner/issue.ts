@@ -83,13 +83,16 @@ export async function issueCredential(p: IssueCredentialParams): Promise<IssuedC
 }
 
 /**
- * Rebuilds the permission plugin for a previously issued session key so the owner can
- * uninstall it. Requires the same policy parameters used at issuance.
+ * Rebuilds a permission plugin for a previously issued session key so the owner can
+ * uninstall it. When the permission id recorded at issuance is supplied, Kernel targets
+ * that installation directly, so revocation keeps working even if the policy builder
+ * has changed since the key was issued.
  */
 export async function permissionPluginForRevocation(
   client: PublicClient,
   sessionKeyAddress: Address,
   policy: SessionPolicyParams,
+  permissionId?: `0x${string}`,
 ) {
   const emptySigner = await toECDSASigner({ signer: addressToEmptyAccount(sessionKeyAddress) });
   return toPermissionValidator(client, {
@@ -97,5 +100,6 @@ export async function permissionPluginForRevocation(
     kernelVersion: KERNEL_VERSION,
     signer: emptySigner,
     policies: buildSessionPolicies(policy),
+    ...(permissionId ? { permissionId } : {}),
   });
 }

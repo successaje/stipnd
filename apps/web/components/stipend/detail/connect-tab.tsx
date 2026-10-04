@@ -86,15 +86,20 @@ export function ConnectTab({ s }: { s: Stipend }) {
   async function revoke(r: IssuedRecord) {
     setRevoking(r.permissionId);
     try {
-      const plugin = await permissionPluginForRevocation(publicClient(), r.sessionKeyAddress, {
-        hub: appConfig.hub,
-        stipendId: s.id,
-        perCallCap: BigInt(r.policy.perCallCap),
-        maxCallsPerWindow: r.policy.maxCallsPerWindow || undefined,
-        rateWindow: r.policy.rateWindow || undefined,
-        expiresAt: r.policy.expiresAt || undefined,
-        now: r.policy.now,
-      });
+      const plugin = await permissionPluginForRevocation(
+        publicClient(),
+        r.sessionKeyAddress,
+        {
+          hub: appConfig.hub,
+          stipendId: s.id,
+          perCallCap: BigInt(r.policy.perCallCap),
+          maxCallsPerWindow: r.policy.maxCallsPerWindow || undefined,
+          rateWindow: r.policy.rateWindow || undefined,
+          expiresAt: r.policy.expiresAt || undefined,
+          now: r.policy.now,
+        },
+        r.permissionId,
+      );
       const hash = await kernelClient.uninstallPlugin({ plugin });
       await kernelClient.waitForUserOperationReceipt({ hash, timeout: 120_000 });
       markRevoked(r.permissionId);
