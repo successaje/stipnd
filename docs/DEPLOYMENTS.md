@@ -1,5 +1,9 @@
 # Deployments
 
+## Web
+
+Production: https://stipnd.vercel.app (Vercel project `stipnd`, root directory `apps/web`, env `NEXT_PUBLIC_ZERODEV_PROJECT_ID`). Deployed 2026-10-04 from `main`.
+
 ## Arbitrum Sepolia (chain id 421614)
 
 | Contract                         | Address                                                                                                                        | Deployed at block |

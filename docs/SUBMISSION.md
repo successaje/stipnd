@@ -31,7 +31,7 @@ Live on Arbitrum Sepolia with passkey accounts, sponsored gas, a reference merch
 ## Links
 
 - Repository: https://github.com/successaje/stipnd
-- Live app: [Vercel URL]
+- Live app: https://stipnd.vercel.app
 - Contracts: https://sepolia.arbiscan.io/address/0xb4e1602533425E670E0FA286FA87FeFF27Bd3197 (StipendHub), https://sepolia.arbiscan.io/address/0x3C0c5EDCb291374F8895FA4b0cC21c8D557aF97E (MerchantRegistry)
 - Demo video: [URL]
 
