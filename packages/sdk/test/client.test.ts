@@ -54,7 +54,7 @@ describe("createStipndClient.pay", () => {
   it("encodes pay() for the credential's stipend and returns a proof", async () => {
     const submitter = fakeSubmitter(["paid"]);
     const onReceipt = vi.fn();
-    const client = createStipndClient({ credential, submitter, onReceipt });
+    const client = createStipndClient({ credential, submitter, onReceipt, preflight: false });
     const { receipt, proof } = await client.pay(challenge);
     expect(receipt.status).toBe("paid");
     expect(proof.stipendId).toBe("7");
@@ -75,7 +75,12 @@ describe("createStipndClient.pay", () => {
       RejectReason.DuplicateResource,
       RejectReason.DuplicateResource,
     ]);
-    const client = createStipndClient({ credential, submitter, haltAfterRejections: 3 });
+    const client = createStipndClient({
+      credential,
+      submitter,
+      haltAfterRejections: 3,
+      preflight: false,
+    });
     for (let i = 0; i < 3; i++) {
       await expect(client.pay(challenge)).rejects.toBeInstanceOf(StipndRejectedError);
     }
@@ -88,7 +93,7 @@ describe("createStipndClient.pay", () => {
 
   it("refuses challenges for another chain, hub, or token before touching the chain", async () => {
     const submitter = fakeSubmitter([]);
-    const client = createStipndClient({ credential, submitter });
+    const client = createStipndClient({ credential, submitter, preflight: false });
     await expect(client.pay({ ...challenge, chainId: 1 })).rejects.toBeInstanceOf(
       StipndChallengeError,
     );
@@ -120,7 +125,12 @@ describe("createStipndClient.fetch", () => {
       }
       return new Response("the report", { status: 200 });
     });
-    const client = createStipndClient({ credential, submitter, fetch: fetchImpl as typeof fetch });
+    const client = createStipndClient({
+      credential,
+      submitter,
+      fetch: fetchImpl as typeof fetch,
+      preflight: false,
+    });
     const res = await client.fetch(url);
     expect(res.status).toBe(200);
     expect(await res.text()).toBe("the report");
@@ -131,7 +141,12 @@ describe("createStipndClient.fetch", () => {
   it("passes through non-Stipnd 402s untouched", async () => {
     const submitter = fakeSubmitter([]);
     const fetchImpl = vi.fn(async () => new Response("pay me somehow", { status: 402 }));
-    const client = createStipndClient({ credential, submitter, fetch: fetchImpl as typeof fetch });
+    const client = createStipndClient({
+      credential,
+      submitter,
+      fetch: fetchImpl as typeof fetch,
+      preflight: false,
+    });
     const res = await client.fetch(url);
     expect(res.status).toBe(402);
     expect(submitter.calls).toHaveLength(0);

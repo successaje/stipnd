@@ -24,9 +24,22 @@ export function publicClient(): PublicClient {
 export type KernelClient = Awaited<ReturnType<typeof buildKernelClient>>["kernelClient"];
 export type KernelAccount = Awaited<ReturnType<typeof buildKernelClient>>["account"];
 
+let _bundlerReads: PublicClient | undefined;
+
+/** Reads routed through the ZeroDev RPC, so estimation and nonces match the bundler's view. */
+function bundlerReadClient(): PublicClient {
+  if (!_bundlerReads) {
+    _bundlerReads = createPublicClient({
+      chain: appConfig.chain!,
+      transport: http(appConfig.bundlerUrl),
+    });
+  }
+  return _bundlerReads;
+}
+
 /** Owner account + client for a root validator (passkey or ECDSA). Gas is sponsored. */
 export async function buildKernelClient(sudo: KernelValidator) {
-  const client = publicClient();
+  const client = bundlerReadClient();
   const chain = appConfig.chain!;
   const account = await createKernelAccount(client, {
     entryPoint: ENTRY_POINT,

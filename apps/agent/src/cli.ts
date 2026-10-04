@@ -3,7 +3,7 @@ import "dotenv/config";
 import { createStipndClient, StipndHaltedError, StipndRejectedError } from "@stipnd/sdk";
 import { decodeCredential, formatMoney, REJECT_COPY, type Receipt } from "@stipnd/protocol";
 
-type Mode = "normal" | "overcap" | "loop" | "status";
+type Mode = "normal" | "overcap" | "loop" | "status" | "buy";
 
 function usage(): never {
   console.log(`stipnd-agent <mode> [options]
@@ -13,10 +13,12 @@ modes
   overcap   try to buy the $5 dataset (expect a per-call cap rejection)
   loop      request the same report repeatedly until the stipend stops it
   status    print the stipend's remaining budget and balance
+  buy       buy one path: buy --path /quotes/MSFT
 
 options
   --merchant <url>   merchant base URL (default $STIPND_MERCHANT_URL or http://localhost:4020)
   --count <n>        requests for loop mode (default 12)
+  --path <p>         path for buy mode
 
 env
   STIPND_CREDENTIAL  the stipnd_v1_… credential from the owner app
@@ -30,7 +32,7 @@ function arg(name: string): string | undefined {
 }
 
 const mode = (process.argv[2] ?? "") as Mode;
-if (!["normal", "overcap", "loop", "status"].includes(mode)) usage();
+if (!["normal", "overcap", "loop", "status", "buy"].includes(mode)) usage();
 
 const credentialString = process.env.STIPND_CREDENTIAL;
 if (!credentialString) {
@@ -120,6 +122,13 @@ async function main() {
 
   if (mode === "overcap") {
     await buy("/datasets/1");
+    return;
+  }
+
+  if (mode === "buy") {
+    const path = arg("path");
+    if (!path) usage();
+    await buy(path);
     return;
   }
 

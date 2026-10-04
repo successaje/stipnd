@@ -8,5 +8,6 @@ export {
   StipndRejectedError,
   StipndHaltedError,
   StipndChallengeError,
+  StipndSessionPolicyError,
 } from "./errors";
 export { KERNEL_VERSION, ENTRY_POINT } from "./constants";
