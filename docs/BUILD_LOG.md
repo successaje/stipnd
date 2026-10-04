@@ -20,7 +20,7 @@ Milestones, in order. Checked when merged to `main`.
 - [x] Merchant directory, merchant detail, registration script — PR #5
 - [x] Web unit tests — PR #5
 - [x] Documentation pass (README, deployments)
-- [ ] End-to-end run on Arbitrum Sepolia with a ZeroDev project (passkey → create → issue → agent pays → loop refused → freeze)
+- [x] End-to-end run on Arbitrum Sepolia with a ZeroDev project: create → issue → agent pays → over-cap refused → loop refused onchain ×3 and agent halts → freeze refused onchain → merchant registered (2026-10-04, stipend #1, fixes in PR #8)
 - [ ] Loading / error / empty state audit
 - [ ] Responsive and motion audit
 - [ ] Accessibility pass (focus order, labels, contrast)

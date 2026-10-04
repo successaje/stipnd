@@ -129,6 +129,8 @@ CI runs all of the above on every pull request.
 
 ## Status and honest limitations
 
+- Verified end to end on Arbitrum Sepolia: passkey/dev-key owner, create with funding, issue credential, agent pays, over-cap refused, loop refused onchain three times and the agent halts, freeze refuses onchain, merchant registered. See `docs/BUILD_LOG.md`.
+- A payment above the per-call cap is blocked by the session key's own policy before it reaches the chain, so it does not produce an onchain receipt. The SDK refuses it locally with the same reason; every other refusal is recorded by the hub.
 - The identity registry is not configured on the Sepolia deployment, so "verified" means "registered" there.
 - The merchant keeps redemptions in memory; a real deployment should persist them.
 - Receipts are read from events on each page load with short polling; an indexer would be the next step at scale.
