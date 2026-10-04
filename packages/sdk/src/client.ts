@@ -76,6 +76,9 @@ export interface StipndClient {
   readonly consecutiveRejections: number;
 }
 
+const PROOF_RETRIES = 4;
+const PROOF_RETRY_DELAY_MS = 1_500;
+
 export function createStipndClient(options: StipndClientOptions): StipndClient {
   const credential =
     typeof options.credential === "string"
@@ -201,14 +204,26 @@ export function createStipndClient(options: StipndClientOptions): StipndClient {
       init?.headers ?? (input instanceof Request ? input.headers : undefined),
     );
     headers.set("Authorization", paymentHeaderValue(proof));
-    const second = await fetchImpl(input, { ...init, headers });
-    if (second.status === 402) {
-      throw new StipndError(
-        "PROOF_REJECTED",
-        "Paid onchain but the merchant did not accept the proof. Keep the receipt; contact the merchant.",
-      );
+
+    // A merchant's RPC can lag the bundler by a few seconds. Give it a short grace period
+    // before concluding the proof was refused for a real reason.
+    let lastReason = "";
+    for (let attempt = 0; attempt < PROOF_RETRIES; attempt++) {
+      const second = await fetchImpl(input, { ...init, headers });
+      if (second.status !== 402) return second;
+      try {
+        const body = (await second.clone().json()) as { error?: string };
+        lastReason = body.error ?? "";
+      } catch {
+        lastReason = "";
+      }
+      if (!/not found|retry/i.test(lastReason)) break;
+      await new Promise((r) => setTimeout(r, PROOF_RETRY_DELAY_MS * (attempt + 1)));
     }
-    return second;
+    throw new StipndError(
+      "PROOF_REJECTED",
+      `Paid onchain (${proof.txHash}) but the merchant did not accept the proof${lastReason ? `: ${lastReason}` : "."} Keep the receipt.`,
+    );
   }
 
   async function preview(challenge?: Challenge): Promise<StipendStatus> {

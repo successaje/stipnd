@@ -3,11 +3,10 @@ import {
   ParamCondition,
   toCallPolicy,
   toGasPolicy,
-  toRateLimitPolicy,
   toTimestampPolicy,
 } from "@zerodev/permissions/policies";
 import type { Policy as KernelPolicy } from "@zerodev/permissions";
-import type { Address } from "viem";
+import { parseEther, type Address } from "viem";
 import { stipendHubAbi } from "@stipnd/protocol";
 
 export interface SessionPolicyParams {
@@ -15,7 +14,7 @@ export interface SessionPolicyParams {
   stipendId: bigint;
   /** Mirrors the stipend's per-call cap. Enforced by the account before the hub sees the call. */
   perCallCap: bigint;
-  /** Optional outer rate limit. Give the hub room to record a few rejections first. */
+  /** Kept for compatibility with stored issuance records; rate limiting is enforced by the hub. */
   maxCallsPerWindow?: number;
   rateWindow?: number;
   /** Unix seconds. 0 or undefined means no expiry at the account layer. */
@@ -24,13 +23,18 @@ export interface SessionPolicyParams {
   now?: number;
 }
 
-/** Extra calls the account layer tolerates beyond the hub's limit, so rejections can still be recorded. */
-export const RATE_LIMIT_HEADROOM = 3;
+/**
+ * Total gas (in wei of the account's own ETH) a session key may ever consume. Operations are
+ * normally sponsored, so this only matters if someone sends ETH to the account; it keeps a
+ * leaked key from burning it. Kernel's gas policy treats a zero allowance as "nothing", so a
+ * concrete number is required.
+ */
+export const SESSION_GAS_ALLOWANCE = parseEther("0.02");
 
 /**
  * The Kernel permission attached to an agent's session key. It is the first enforcement
  * layer: the key can only call `StipendHub.pay` for this stipend id with `amount <= cap`,
- * only within the window, only with sponsored gas, and only until expiry.
+ * with a bounded gas allowance, and only until expiry.
  */
 export function buildSessionPolicies(p: SessionPolicyParams): KernelPolicy[] {
   const policies: KernelPolicy[] = [
@@ -52,19 +56,13 @@ export function buildSessionPolicies(p: SessionPolicyParams): KernelPolicy[] {
         },
       ],
     }),
-    // The session key may only send sponsored operations; it can never spend the account's ETH.
-    toGasPolicy({ enforcePaymaster: true }),
+    // Bounded gas allowance so a leaked key cannot burn ETH that lands in the account.
+    toGasPolicy({ allowed: SESSION_GAS_ALLOWANCE }),
   ];
 
-  if (p.maxCallsPerWindow && p.rateWindow) {
-    policies.push(
-      toRateLimitPolicy({
-        count: p.maxCallsPerWindow + RATE_LIMIT_HEADROOM,
-        interval: p.rateWindow,
-        startAt: p.now ?? Math.floor(Date.now() / 1000),
-      }),
-    );
-  }
+  // Rate limiting is deliberately left to the hub: it refuses onchain with a receipt the owner can
+  // see, while Kernel's rate-limit policy fails silently at validation ("AA22 expired or not due")
+  // and would hide the loop from the receipts feed.
 
   if (p.expiresAt && p.expiresAt > 0) {
     policies.push(toTimestampPolicy({ validUntil: p.expiresAt }));

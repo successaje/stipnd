@@ -16,7 +16,7 @@ Agents buy APIs, data and compute over HTTP, and they retry, fork and loop. The 
 ## What Stipnd does
 
 1. **The owner creates a stipend** with a passkey: name, purpose, budget per period, per-call cap, rate limit, loop guard, merchant policy, expiry. Funds move into a contract the owner controls. One signature, sponsored gas.
-2. **The agent gets a credential**, not a wallet: a session key that the owner's smart account restricts to one function, `StipendHub.pay(stipendId, …, amount ≤ cap, …)`, with sponsored gas only. The credential goes into the agent's environment and the SDK's `fetch` pays Stipnd `402` challenges automatically.
+2. **The agent gets a credential**, not a wallet: a session key that the owner's smart account restricts to one function, `StipendHub.pay(stipendId, …, amount ≤ cap, …)`, with a capped gas allowance. The credential goes into the agent's environment and the SDK's `fetch` pays Stipnd `402` challenges automatically.
 3. **The hub enforces the rules on every call**, independently of the key: period budget, per-call cap, rate window, duplicate-resource guard, merchant mode, expiry, freeze. A refused payment does not revert. It emits `PaymentRejected` with the reason, so the owner sees the loop being stopped.
 4. **Merchants** answer `402` with a challenge and verify the `Paid` event onchain before serving. No account with Stipnd, no webhook, no database. Registered merchants build a settlement track record the hub maintains, and owners can require it.
 
@@ -36,10 +36,10 @@ Resource identity is `keccak256("METHOD origin+path+query")`, computed by both s
 
 ## Two enforcement layers
 
-| Layer                                | Where                         | What it bounds                                                                                            |
-| ------------------------------------ | ----------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Kernel permission on the session key | Owner's ZeroDev smart account | Only `pay` on one stipend id with `amount ≤ cap`, only with sponsored gas, optional rate limit and expiry |
-| `StipendHub` policy                  | Contract                      | Period budget, per-call cap, rate window, duplicate guard, merchant policy, expiry, freeze                |
+| Layer                                | Where                         | What it bounds                                                                             |
+| ------------------------------------ | ----------------------------- | ------------------------------------------------------------------------------------------ |
+| Kernel permission on the session key | Owner's ZeroDev smart account | Only `pay` on one stipend id with `amount ≤ cap`, a capped gas allowance, optional expiry  |
+| `StipendHub` policy                  | Contract                      | Period budget, per-call cap, rate window, duplicate guard, merchant policy, expiry, freeze |
 
 If either has a bug, the other still bounds exposure. The owner's freeze stops every credential at once; revoking removes one key for good.
 
@@ -58,7 +58,7 @@ If either has a bug, the other still bounds exposure. The owner's freeze stops e
 ## Sponsor technology, exactly
 
 - **Arbitrum Sepolia**: all contracts and every payment. Predictable, cheap fees make per-call enforcement affordable. `packages/protocol/src/deployments.ts` holds the addresses.
-- **ZeroDev Kernel v3.1**: owner accounts with passkey validators (`apps/web/lib/account/signers.ts`), sponsored gas through the ZeroDev paymaster (`apps/web/lib/clients.ts`), session keys built from call, gas, rate-limit and timestamp policies (`packages/sdk/src/owner/policies.ts`), serialized permission accounts as credentials (`packages/sdk/src/owner/issue.ts`), revocation by `uninstallPlugin` (`apps/web/components/stipend/detail/connect-tab.tsx`).
+- **ZeroDev Kernel v3.1**: owner accounts with passkey validators (`apps/web/lib/account/signers.ts`), sponsored gas through the ZeroDev paymaster (`apps/web/lib/clients.ts`), session keys built from call, gas and timestamp policies (`packages/sdk/src/owner/policies.ts`), serialized permission accounts as credentials (`packages/sdk/src/owner/issue.ts`), revocation by `uninstallPlugin` (`apps/web/components/stipend/detail/connect-tab.tsx`).
 - **HTTP 402**: x402-style challenge in a `stipnd` scheme (`packages/protocol/src/challenge.ts`) that keeps enforcement in the contract rather than a signature. Merchant middleware in `apps/merchant/src/middleware.ts`.
 - **ERC-8004**: `MerchantRegistry` accepts an IdentityRegistry address and treats a merchant as verified only when it holds an agent identity (`packages/contracts/src/MerchantRegistry.sol`). The Sepolia deployment currently runs with the identity requirement disabled; enabling it is a one-call owner setting.
 

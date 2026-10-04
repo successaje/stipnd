@@ -13,6 +13,8 @@ export interface VerifyParams {
   };
   /** Reject payments older than this many seconds. */
   maxAgeSeconds: number;
+  /** How long to wait for the RPC to see the transaction. */
+  receiptTimeoutMs?: number;
   now?: number;
 }
 
@@ -38,9 +40,15 @@ export async function verifyProof(
     return { ok: false, status: 409, reason: "This payment was already redeemed." };
   }
 
+  // The agent's bundler usually sees the transaction before a public RPC does. Wait briefly
+  // instead of refusing a payment that is seconds old.
   let receipt;
   try {
-    receipt = await client.getTransactionReceipt({ hash: proof.txHash as Hex });
+    receipt = await client.waitForTransactionReceipt({
+      hash: proof.txHash as Hex,
+      timeout: p.receiptTimeoutMs ?? 15_000,
+      pollingInterval: 1_000,
+    });
   } catch {
     return {
       ok: false,

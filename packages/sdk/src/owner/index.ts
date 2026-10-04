@@ -1,4 +1,4 @@
-export { buildSessionPolicies, RATE_LIMIT_HEADROOM } from "./policies";
+export { buildSessionPolicies, SESSION_GAS_ALLOWANCE } from "./policies";
 export type { SessionPolicyParams } from "./policies";
 export { issueCredential, permissionPluginForRevocation } from "./issue";
 export type { IssueCredentialParams, IssuedCredential } from "./issue";
