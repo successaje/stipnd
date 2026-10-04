@@ -12,6 +12,8 @@ export interface IssuedRecord {
   permissionId: Hex;
   issuedAt: number;
   revokedAt?: number;
+  /** Serialized Kernel policies installed with this key; required to revoke it exactly. */
+  policyParams?: string;
   /** Policy parameters used at issuance; needed to rebuild the permission for revocation. */
   policy: {
     perCallCap: string;
