@@ -9,16 +9,33 @@ export class StipndError extends Error {
   }
 }
 
-/** The hub refused the payment. The attempt is recorded onchain as a receipt. */
+/**
+ * The stipend refused the payment. When `receipt` is present the attempt was recorded onchain;
+ * otherwise the client stopped it before sending (the hub's preview said it would be refused,
+ * or the session key's own policy would have blocked it).
+ */
 export class StipndRejectedError extends StipndError {
   readonly reason: RejectReason;
-  readonly receipt: Receipt;
-  constructor(reason: RejectReason, receipt: Receipt) {
+  readonly receipt?: Receipt;
+  readonly onchain: boolean;
+  constructor(reason: RejectReason, receipt?: Receipt) {
     const copy = REJECT_COPY[reason];
     super("REJECTED", `${copy.title}. ${copy.detail}`);
     this.name = "StipndRejectedError";
     this.reason = reason;
     this.receipt = receipt;
+    this.onchain = !!receipt;
+  }
+}
+
+/** The session key's own permission refused the call before it reached the hub. */
+export class StipndSessionPolicyError extends StipndError {
+  constructor(detail: string) {
+    super(
+      "SESSION_POLICY",
+      `The credential's session key refused this call before it reached the chain: ${detail}`,
+    );
+    this.name = "StipndSessionPolicyError";
   }
 }
 

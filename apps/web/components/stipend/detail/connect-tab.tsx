@@ -162,7 +162,7 @@ export function ConnectTab({ s }: { s: Stipend }) {
           </div>
           <p className="mt-1 text-xs text-money-ink/80">
             Scoped to stipend #{s.id.toString()}, {formatAmount(s.policy.perCallCap, decimals)}{" "}
-            {symbol} per call, sponsored gas only.
+            {symbol} per call, gas allowance capped.
           </p>
           <div className="mt-3">
             <Segmented

@@ -17,7 +17,7 @@
 
 Two enforcement layers, on purpose:
 
-1. **Kernel permission (off the hub's control).** The agent's session key may only call `StipendHub.pay` for its own stipend id with `amount <= perCallCap`, under a rate-limit policy, a timestamp policy, and a gas policy. It cannot call `freeze`, `withdraw`, `updatePolicy`, or anything else.
+1. **Kernel permission (off the hub's control).** The agent's session key may only call `StipendHub.pay` for its own stipend id with `amount <= perCallCap`, under a gas allowance policy and an optional timestamp policy. Rate limiting is left to the hub on purpose: the hub refuses with a receipt, while a Kernel rate-limit policy fails silently at validation. It cannot call `freeze`, `withdraw`, `updatePolicy`, or anything else.
 2. **StipendHub (onchain, per stipend).** Cumulative budget per period, duplicate-resource guard, merchant policy, frozen flag, expiry. These apply regardless of which key submitted the call.
 
 If either layer has a bug, the other still bounds exposure.

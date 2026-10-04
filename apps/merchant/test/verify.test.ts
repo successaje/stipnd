@@ -38,7 +38,7 @@ function paidLog(amount: bigint, logIndex = 0): Log {
 
 function client(logs: Log[], blockAgeSeconds = 5): PublicClient {
   return {
-    async getTransactionReceipt() {
+    async waitForTransactionReceipt() {
       return { status: "success", blockNumber: 10n, logs };
     },
     async getBlock() {

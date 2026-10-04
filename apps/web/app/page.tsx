@@ -220,7 +220,7 @@ export default function LandingPage() {
                 ],
                 [
                   "ZeroDev Kernel",
-                  "Passkey-owned smart accounts, session keys with call, rate, time and gas policies, sponsored gas.",
+                  "Passkey-owned smart accounts, session keys with call, gas and time policies, sponsored gas.",
                 ],
                 [
                   "HTTP 402",

@@ -25,7 +25,7 @@ const config: MerchantConfig = {
 /** A public client that returns a canned receipt for one tx hash. */
 function fakeClient(receiptLogs: unknown[], txHash: Hex): PublicClient {
   return {
-    async getTransactionReceipt({ hash }: { hash: Hex }) {
+    async waitForTransactionReceipt({ hash }: { hash: Hex }) {
       if (hash !== txHash) throw new Error("not found");
       return { status: "success", blockNumber: 10n, logs: receiptLogs };
     },

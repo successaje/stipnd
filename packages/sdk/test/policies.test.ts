@@ -1,18 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { buildSessionPolicies, RATE_LIMIT_HEADROOM } from "../src/owner";
+import { buildSessionPolicies, SESSION_GAS_ALLOWANCE } from "../src/owner";
 import { HUB } from "./helpers";
 
 describe("buildSessionPolicies", () => {
-  it("always includes a call policy and a paymaster-enforcing gas policy", () => {
+  it("always includes a call policy and a bounded gas policy", () => {
     const policies = buildSessionPolicies({ hub: HUB, stipendId: 7n, perCallCap: 1_000_000n });
     expect(policies).toHaveLength(2);
     for (const p of policies) {
       expect(p.getPolicyData()).toMatch(/^0x/);
       expect(p.getPolicyInfoInBytes()).toMatch(/^0x/);
     }
+    expect(SESSION_GAS_ALLOWANCE).toBeGreaterThan(0n);
   });
 
-  it("adds rate-limit and timestamp policies when configured", () => {
+  it("adds an expiry policy when configured and never a rate-limit policy", () => {
     const policies = buildSessionPolicies({
       hub: HUB,
       stipendId: 7n,
@@ -22,7 +23,6 @@ describe("buildSessionPolicies", () => {
       expiresAt: 2_000_000_000,
       now: 1_900_000_000,
     });
-    expect(policies).toHaveLength(4);
-    expect(RATE_LIMIT_HEADROOM).toBeGreaterThan(0);
+    expect(policies).toHaveLength(3);
   });
 });

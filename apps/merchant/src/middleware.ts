@@ -64,6 +64,7 @@ export function stipndPaywall(deps: PaywallDeps, opts: PaidRouteOptions): Middle
     });
 
     if (!result.ok) {
+      console.warn(`stipnd: refused proof for ${method} ${publicUrl.pathname}: ${result.reason}`);
       if (result.status === 409) return c.json({ error: result.reason }, 409);
       return challenge(
         c,

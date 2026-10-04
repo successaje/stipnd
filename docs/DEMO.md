@@ -30,7 +30,7 @@ Two cuts: 30 seconds for the pitch, 2 minutes for judging. Both use the same set
 
 0:50–1:10 **Expand a rejected receipt.** Reason in plain words, merchant, resource hash, transaction link. Click the merchant to show the track record page. "Merchants register once and build a settlement history the hub maintains. Owners can require it."
 
-1:10–1:30 **Connect tab.** "The agent holds this, not a wallet. Scoped to one stipend, sponsored gas only. Shown once." Then **Freeze** in the header. Run `pnpm agent normal` again: red receipt, _Stipend frozen_. Unfreeze.
+1:10–1:30 **Connect tab.** "The agent holds this, not a wallet. Scoped to one stipend, gas allowance capped. Shown once." Then **Freeze** in the header. Run `pnpm agent normal` again: red receipt, _Stipend frozen_. Unfreeze.
 
 1:30–1:50 **Create a new stipend** quickly to show the form's plain-English summary and the one-passkey confirmation.
 

@@ -23,6 +23,7 @@ import {
   StipndError,
   StipndHaltedError,
   StipndRejectedError,
+  StipndSessionPolicyError,
 } from "./errors";
 import { createKernelSubmitter } from "./kernel";
 import { findPaymentReceipt } from "./receipts";
@@ -39,6 +40,13 @@ export interface StipndClientOptions {
   fetch?: typeof globalThis.fetch;
   /** Stop paying after this many rejections in a row. 0 disables. Default 3. */
   haltAfterRejections?: number;
+  /**
+   * Ask the hub's `preview` before sending. A refusal the hub would record (budget, rate,
+   * duplicate, merchant, frozen, expired) is still sent so the owner gets an onchain receipt;
+   * a per-call cap violation is stopped locally because the session key would block it anyway.
+   * Default true. Tests and offline tooling can disable it.
+   */
+  preflight?: boolean;
   /** Called for every settled attempt, paid or rejected. */
   onReceipt?: (receipt: Receipt) => void;
   /** Optional logger. */
@@ -76,6 +84,9 @@ export interface StipndClient {
   readonly consecutiveRejections: number;
 }
 
+const PROOF_RETRIES = 4;
+const PROOF_RETRY_DELAY_MS = 1_500;
+
 export function createStipndClient(options: StipndClientOptions): StipndClient {
   const credential =
     typeof options.credential === "string"
@@ -104,9 +115,9 @@ export function createStipndClient(options: StipndClientOptions): StipndClient {
     if (!readyPromise) {
       readyPromise = (async () => {
         if (!submitter) {
-          const k = await createKernelSubmitter(credential, { publicClient: reads() });
-          submitter = k;
-          publicClient = k.publicClient;
+          // The submitter uses the bundler's RPC for nonce and estimation; reads stay on the
+          // chain RPC so previews and status never depend on the bundler being up.
+          submitter = await createKernelSubmitter(credential);
         }
       })();
     }
@@ -137,6 +148,17 @@ export function createStipndClient(options: StipndClientOptions): StipndClient {
     const s = submitter!;
     const amount = BigInt(challenge.amount);
 
+    if (options.preflight !== false) {
+      const pre = await preview(challenge);
+      if (!pre.ok && pre.reason === RejectReason.PerCallCap) {
+        // The session key's call policy caps `amount` too, so this would revert at validation
+        // and never produce a receipt. Refuse locally with the real reason instead.
+        consecutive += 1;
+        log(`refused locally: over the per-call cap (${challenge.amount})`);
+        throw new StipndRejectedError(RejectReason.PerCallCap);
+      }
+    }
+
     log(`paying ${challenge.amount} to ${challenge.merchant} for ${challenge.resource}`);
     const data = encodeFunctionData({
       abi: stipendHubAbi,
@@ -150,7 +172,22 @@ export function createStipndClient(options: StipndClientOptions): StipndClient {
       ],
     });
 
-    const result = await s.submit({ to: hub, data });
+    let result;
+    try {
+      result = await s.submit({ to: hub, data });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (/AA23/.test(msg) && /0x59d52e40/.test(msg)) {
+        consecutive += 1;
+        throw new StipndSessionPolicyError(
+          "the call is outside the permission's rules (wrong function, stipend, or amount above the cap).",
+        );
+      }
+      if (/AA22/.test(msg)) {
+        throw new StipndSessionPolicyError("the credential is expired or not yet valid.");
+      }
+      throw e;
+    }
     if (!result.success) {
       throw new StipndError(
         "USEROP_FAILED",
@@ -201,14 +238,26 @@ export function createStipndClient(options: StipndClientOptions): StipndClient {
       init?.headers ?? (input instanceof Request ? input.headers : undefined),
     );
     headers.set("Authorization", paymentHeaderValue(proof));
-    const second = await fetchImpl(input, { ...init, headers });
-    if (second.status === 402) {
-      throw new StipndError(
-        "PROOF_REJECTED",
-        "Paid onchain but the merchant did not accept the proof. Keep the receipt; contact the merchant.",
-      );
+
+    // A merchant's RPC can lag the bundler by a few seconds. Give it a short grace period
+    // before concluding the proof was refused for a real reason.
+    let lastReason = "";
+    for (let attempt = 0; attempt < PROOF_RETRIES; attempt++) {
+      const second = await fetchImpl(input, { ...init, headers });
+      if (second.status !== 402) return second;
+      try {
+        const body = (await second.clone().json()) as { error?: string };
+        lastReason = body.error ?? "";
+      } catch {
+        lastReason = "";
+      }
+      if (!/not found|retry/i.test(lastReason)) break;
+      await new Promise((r) => setTimeout(r, PROOF_RETRY_DELAY_MS * (attempt + 1)));
     }
-    return second;
+    throw new StipndError(
+      "PROOF_REJECTED",
+      `Paid onchain (${proof.txHash}) but the merchant did not accept the proof${lastReason ? `: ${lastReason}` : "."} Keep the receipt.`,
+    );
   }
 
   async function preview(challenge?: Challenge): Promise<StipendStatus> {
