@@ -186,6 +186,12 @@ export function createStipndClient(options: StipndClientOptions): StipndClient {
       if (/AA22/.test(msg)) {
         throw new StipndSessionPolicyError("the credential is expired or not yet valid.");
       }
+      if (/AA23/.test(msg) && /0x756688fe/.test(msg)) {
+        consecutive += 1;
+        throw new StipndSessionPolicyError(
+          "the credential was revoked by the owner (its permission is no longer installed).",
+        );
+      }
       throw e;
     }
     if (!result.success) {

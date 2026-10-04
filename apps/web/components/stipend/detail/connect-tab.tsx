@@ -62,6 +62,7 @@ export function ConnectTab({ s }: { s: Stipend }) {
         label: label.trim() || s.name,
         sessionKeyAddress: result.sessionKeyAddress,
         permissionId: result.permissionId,
+        policyParams: result.policyParams,
         issuedAt: Date.now(),
         policy: {
           perCallCap: s.policy.perCallCap.toString(),
@@ -99,6 +100,7 @@ export function ConnectTab({ s }: { s: Stipend }) {
           now: r.policy.now,
         },
         r.permissionId,
+        r.policyParams,
       );
       const hash = await kernelClient.uninstallPlugin({ plugin });
       await kernelClient.waitForUserOperationReceipt({ hash, timeout: 120_000 });
@@ -109,7 +111,13 @@ export function ConnectTab({ s }: { s: Stipend }) {
       });
     } catch (e) {
       console.error(e);
-      toast.error("Couldn't revoke", { description: humanizeError(e) });
+      const msg = e instanceof Error ? e.message : String(e);
+      const legacy = /0x09ee6468|PermissionDataLengthMismatch/.test(msg);
+      toast.error("Couldn't revoke", {
+        description: legacy
+          ? "Nothing is installed for this key yet: a credential only installs on the account the first time it pays. It stays valid until then. Freeze the stipend to stop every key, or let it expire."
+          : humanizeError(e),
+      });
     } finally {
       setRevoking(null);
     }
