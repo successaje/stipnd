@@ -96,6 +96,7 @@ interface IStipendHub {
     error NotOwner();
     error ZeroAddress();
     error ZeroAmount();
+    error InsufficientBalance();
     error InvalidPolicy();
     error NameTooLong();
     error UnknownStipend();

@@ -115,6 +115,13 @@ contract StipendHubTest is Test {
         assertEq(usd.balanceOf(owner), 10_000 * USD - 6 * USD);
     }
 
+    function test_withdraw_overBalanceReverts() public {
+        uint256 id = _create(_policy(), 10 * USD);
+        vm.prank(owner);
+        vm.expectRevert(IStipendHub.InsufficientBalance.selector);
+        hub.withdraw(id, 11 * USD, owner);
+    }
+
     // ------------------------------------------------------------------
     // pay: happy path and receipts
     // ------------------------------------------------------------------
