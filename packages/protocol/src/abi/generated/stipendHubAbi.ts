@@ -964,6 +964,11 @@ export const stipendHubAbi = [
   },
   {
     type: "error",
+    name: "InsufficientBalance",
+    inputs: [],
+  },
+  {
+    type: "error",
     name: "InvalidPolicy",
     inputs: [],
   },

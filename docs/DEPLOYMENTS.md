@@ -13,6 +13,6 @@ Production: https://stipnd.vercel.app (Vercel project `stipnd`, root directory `
 | Stipend token (Circle test USDC) | `0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d`                                                                                   | –                 |
 | ERC-8004 IdentityRegistry        | not configured (zero address); verified mode requires registration only                                                        | –                 |
 
-Deployed 2026-10-03 with `script/Deploy.s.sol`. Sources submitted to Sourcify. The raw record lives in `packages/contracts/deployments/421614.json` and is mirrored in `@stipnd/protocol`'s `DEPLOYMENTS` map, which the web app and merchant use as defaults.
+Deployed 2026-10-03 with `script/Deploy.s.sol`. Sources submitted to Sourcify. This deployment predates #13: on this hub an over-balance `withdraw` still reverts with `ZeroAmount()` rather than `InsufficientBalance()`. Funds are unaffected; the next deploy picks up the new error. The raw record lives in `packages/contracts/deployments/421614.json` and is mirrored in `@stipnd/protocol`'s `DEPLOYMENTS` map, which the web app and merchant use as defaults.
 
 The registry owner (able to set the hub address and the identity registry) is the throwaway deployer `0xe078d09e0a28973Dd8ea3Ea3e49DF60eFD746a83`. The hub has no owner.
