@@ -36,9 +36,36 @@ export async function verifyProof(
     return { ok: false, status: 402, reason: "Proof is for a different chain." };
   }
   const key = `${proof.txHash}:${proof.logIndex}`;
-  if (await redeemed.has(key)) {
+
+  // Claim the proof atomically *before* any async verification work. Otherwise two
+  // requests carrying the same proof could both pass an `has()` check and then both
+  // unlock the resource during the `await`s below — one payment redeemed twice. The
+  // reservation holds the key for whichever request got it first; a losing concurrent
+  // request is told it was already redeemed.
+  if (!(await redeemed.reserve(key))) {
     return { ok: false, status: 409, reason: "This payment was already redeemed." };
   }
+
+  let result: VerifyResult;
+  try {
+    result = await verifyClaimedProof(client, p);
+  } catch (err) {
+    // An unexpected failure during verification must not leave the proof claimed.
+    await redeemed.release(key);
+    throw err;
+  }
+
+  // Keep the claim only when the proof verified. Any failure — including "not seen
+  // yet, retry" — releases it so a genuine later retry of the same proof can succeed.
+  if (!result.ok) {
+    await redeemed.release(key);
+  }
+  return result;
+}
+
+/** The verification checks for a proof that has already been claimed in the redemption store. */
+async function verifyClaimedProof(client: PublicClient, p: VerifyParams): Promise<VerifyResult> {
+  const { proof, expected } = p;
 
   // The agent's bundler usually sees the transaction before a public RPC does. Wait briefly
   // instead of refusing a payment that is seconds old.
@@ -84,24 +111,39 @@ export async function verifyProof(
     return { ok: false, status: 402, reason: "Payment is too old for this resource." };
   }
 
-  await redeemed.add(key);
   return { ok: true, txHash: paid.txHash, logIndex: paid.logIndex, amount: paid.amount, stipendId };
 }
 
-/** Prevents one payment from unlocking a resource twice. In-memory for the reference merchant. */
+/**
+ * Prevents one payment from unlocking a resource more than once.
+ *
+ * `reserve` atomically claims a key: it returns `true` only for the first caller and
+ * `false` for every later one, even when calls overlap — this is what makes redemption
+ * safe under concurrent requests. A caller that reserved a key but then failed to verify
+ * calls `release` so a genuine retry of the same proof can claim it again.
+ *
+ * In-memory for the reference merchant. A real deployment should back this with a store
+ * whose claim is atomic across processes, e.g. Redis `SET key NX` or a unique-constraint
+ * insert, with `release` deleting the row.
+ */
 export interface RedemptionStore {
-  has(key: string): Promise<boolean>;
-  add(key: string): Promise<void>;
+  reserve(key: string): Promise<boolean>;
+  release(key: string): Promise<void>;
 }
 
 export function memoryRedemptionStore(): RedemptionStore {
   const set = new Set<string>();
   return {
-    async has(key) {
-      return set.has(key);
-    },
-    async add(key) {
+    // Synchronous test-and-set: on Node's single event-loop thread, the check and the
+    // insert run without an intervening `await`, so two overlapping reserves cannot both
+    // see the key absent.
+    async reserve(key) {
+      if (set.has(key)) return false;
       set.add(key);
+      return true;
+    },
+    async release(key) {
+      set.delete(key);
     },
   };
 }

@@ -72,6 +72,43 @@ describe("verifyProof", () => {
     expect(second).toMatchObject({ ok: false, status: 409 });
   });
 
+  it("redeems only once when the same proof is verified concurrently", async () => {
+    const store = memoryRedemptionStore();
+    const c = client([paidLog(400_000n)]);
+    // Fire overlapping requests carrying the same proof. Exactly one may unlock the
+    // resource; the rest must be refused as already redeemed, never served.
+    const run = () => verifyProof(c, store, { proof, expected, maxAgeSeconds: 900 });
+    const results = await Promise.all(Array.from({ length: 5 }, run));
+    expect(results.filter((r) => r.ok)).toHaveLength(1);
+    for (const r of results) {
+      if (!r.ok) expect(r.status).toBe(409);
+    }
+  });
+
+  it("releases the claim when verification fails so a genuine retry can succeed", async () => {
+    const store = memoryRedemptionStore();
+    // The transaction is not visible to the RPC yet: verification fails, telling the
+    // agent to retry. This must not permanently burn the proof.
+    const notYet = {
+      async waitForTransactionReceipt() {
+        throw new Error("timeout");
+      },
+      async getBlock() {
+        return { timestamp: BigInt(Math.floor(Date.now() / 1000)) };
+      },
+    } as unknown as PublicClient;
+    const first = await verifyProof(notYet, store, { proof, expected, maxAgeSeconds: 900 });
+    expect(first).toMatchObject({ ok: false, status: 402 });
+
+    // Once the transaction is visible, the same proof must still be redeemable.
+    const retry = await verifyProof(client([paidLog(400_000n)]), store, {
+      proof,
+      expected,
+      maxAgeSeconds: 900,
+    });
+    expect(retry.ok).toBe(true);
+  });
+
   it("rejects underpayment, wrong resource, and stale payments", async () => {
     const store = memoryRedemptionStore();
     const under = await verifyProof(client([paidLog(100n)]), store, {
