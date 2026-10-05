@@ -124,7 +124,7 @@ contract StipendHub is IStipendHub, ReentrancyGuard {
         if (to == address(0)) revert ZeroAddress();
         if (amount == 0) revert ZeroAmount();
         Stipend storage s = _stipends[id];
-        if (amount > s.balance) revert ZeroAmount();
+        if (amount > s.balance) revert InsufficientBalance();
         s.balance -= amount;
         IERC20(s.token).safeTransfer(to, amount);
         emit Withdrawn(id, to, amount, s.balance);
